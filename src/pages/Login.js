@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleButton } from 'react-google-button';
-// import { useSelector } from 'react-redux';
 
-import userState from '../features/user';
+import userState from '../recoil/user';
 
 import { useRecoilValue } from 'recoil';
 
@@ -13,14 +12,6 @@ import styled from 'styled-components';
 
 const Login = () => {
   const navigate = useNavigate();
-  // const isLoggedIn = localStorage.getItem('name');
-
-  // useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigate('/');
-  //   }
-  // }, [isLoggedIn]);
-  // const name = useSelector((store) => store.displayName);
   const name = useRecoilValue(userState);
 
   useEffect(() => {

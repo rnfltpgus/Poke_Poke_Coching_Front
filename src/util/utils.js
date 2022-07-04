@@ -76,6 +76,7 @@ export function toggleLoadingUI(
   }
 }
 
+// 여기서부터
 function toTuple({ y, x }) {
   return [y, x];
 }
@@ -103,11 +104,13 @@ export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
  * Draws a pose skeleton by looking up all adjacent keypoints/joints
  */
 export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+  // 어느곳을 그릴지 정해서
   const adjacentKeyPoints = posenet.getAdjacentKeyPoints(
     keypoints,
     minConfidence,
   );
 
+  // 어래이를 돌면서 그리게 된다.
   adjacentKeyPoints.forEach((keypoints) => {
     drawSegment(
       toTuple(keypoints[0].position),
@@ -153,6 +156,7 @@ export function drawBoundingBox(keypoints, ctx) {
   ctx.strokeStyle = boundingBoxColor;
   ctx.stroke();
 }
+// 여기까지?
 
 /**
  * Converts an arary of pixel data into an ImageData object

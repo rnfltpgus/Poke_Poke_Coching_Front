@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import userState from '../features/user';
+import userState from '../recoil/user';
 import { signOutGoogle, auth } from '../auth/firebase';
 
 import styled from 'styled-components';

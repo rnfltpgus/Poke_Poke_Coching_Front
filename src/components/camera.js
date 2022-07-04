@@ -10,18 +10,18 @@ function Camera() {
   // Load poseNet
   // 실제로 여기서 전체의 기능을 로드하는 부분
   const runPoseNet = async () => {
-    const net = await posenet.load({
-      inputResolution: { width: 640, height: 480 },
+    const poseNetLoad = await posenet.load({
+      inputResolution: { width: 640, height: 480 }, // 입력해상도
       scale: 0.6, // 수가 짦을 수록 빠르게 결과를 엊을수 있음
     });
 
     setInterval(() => {
-      detect(net);
+      poseDetect(poseNetLoad);
     }, 100);
   };
 
   // 실제로 감시를 하는 부분의 function
-  const detect = async (net) => {
+  const poseDetect = async (net) => {
     if (
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current !== null &&
@@ -38,7 +38,7 @@ function Camera() {
 
       // Make Detections
       const pose = await net.estimateSinglePose(video);
-      console.log(pose);
+      console.log('🔥 현재 좌표값', pose);
 
       drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
@@ -46,11 +46,14 @@ function Camera() {
 
   const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
     const context = canvas.current.getContext('2d');
+    canvas.current.video = video;
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    drawKeyPoints(pose.keypoints, 0.6, context);
-    drawSkeleton(pose.keypoints, 0.6, context);
+    drawKeyPoints(pose.keypoints, 0.5, context);
+    drawSkeleton(pose.keypoints, 0.5, context);
+    // 원하는 부위의 이름을 찾아서 폴문으로 돌수있다.
+    // ex) for(let i = 0; i < pose.keypoints.length; i++)
   };
 
   runPoseNet();

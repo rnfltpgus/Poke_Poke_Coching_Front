@@ -11,7 +11,7 @@ const stretchingMode = () => {
         <span>거북목 교정 스트레칭</span>
       </div>
       <div className='stretchingMode'>
-        {/* <Camera className='stretchingMode' /> */}
+        <Camera className='stretchingMode' />
       </div>
     </StretchingWrap>
   );
