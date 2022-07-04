@@ -1,4 +1,5 @@
 module.exports = {
+  plugins: ['prettier'],
   env: {
     browser: true,
     commonjs: true,
