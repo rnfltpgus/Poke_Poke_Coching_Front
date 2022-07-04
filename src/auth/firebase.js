@@ -5,6 +5,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import axios from 'axios';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -23,6 +24,18 @@ const provider = new GoogleAuthProvider();
 export const signInWithGoogle = () => {
   signInWithPopup(auth, provider)
     .then((result) => {
+      const name = result.user.displayName;
+      const email = result.user.email;
+
+      localStorage.setItem('name', name);
+      localStorage.setItem('email', email);
+
+      const body = {
+        name: name,
+        email: email,
+      };
+
+      axios.post(process.env.REACT_APP_ENV + 'api/user', body);
       console.log('success');
     })
     .catch((error) => {
@@ -31,6 +44,10 @@ export const signInWithGoogle = () => {
 };
 
 export const signOutGoogle = () => {
+  localStorage.removeItem('name');
+  localStorage.removeItem('email');
+  window.location.reload();
+
   signOut(auth)
     .then(() => {
       console.log('logout');

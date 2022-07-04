@@ -1,43 +1,35 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { GoogleButton } from 'react-google-button';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { signInWithGoogle, signOutGoogle, auth } from '../auth/firebase';
-import { isLogined } from '../features/userSlice';
+import userState from '../features/user';
+import { signOutGoogle, auth } from '../auth/firebase';
 
 import styled from 'styled-components';
 
 const Header = () => {
-  const dispatch = useDispatch();
-  const email = useSelector((store) => store.userEmail);
+  const isLogins = useSetRecoilState(userState);
+  const navigate = useNavigate();
+  const name = useRecoilValue(userState);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        dispatch(
-          isLogined({
-            name: user.displayName,
-            email: user.email,
-          }),
-        );
+        isLogins({
+          displayName: user.displayName,
+          email: user.email,
+        });
       } else {
-        dispatch(
-          isLogined({
-            name: null,
-            email: null,
-          }),
-        );
+        isLogins({
+          displayName: null,
+          email: null,
+        });
       }
     });
   }, []);
 
-  const name = useSelector((store) => store.userName);
-
-  const myPage = async () => {
-    const myPage = await axios.post('http://localhost:8080/myPage', {
-      email,
-    });
+  const handleNavigateMyPage = () => {
+    navigate('/mypage');
   };
 
   return (
@@ -47,22 +39,21 @@ const Header = () => {
           <a href='/'>P.P.C.</a>
         </h1>
         <div>
-          {name ? (
+          {name.displayName ? (
             <>
-              <span className='user-name'>{name} 님</span>
+              <span className='user-name'>{name.displayName} 님</span>
               <span className='bar'>|</span>
               <span href='' className='logout' onClick={signOutGoogle}>
                 Sign out
               </span>
-              <button className='my-page' onClick={myPage}>
+              <button className='my-page' onClick={handleNavigateMyPage}>
                 MyPage
               </button>
             </>
           ) : (
-            <GoogleButton
-              className='google-login-button'
-              onClick={signInWithGoogle}
-            />
+            <Link to='/login'>
+              <button className='login'>Login</button>
+            </Link>
           )}
         </div>
       </div>
@@ -77,9 +68,9 @@ const HeaderWrap = styled.div`
   border-bottom: 1px solid #ebebeb;
 
   h1 a {
+    margin-left: 25px;
     font-weight: bold;
     font-size: 28px;
-    margin-left: 10px;
   }
 
   .header-layout {
@@ -87,11 +78,12 @@ const HeaderWrap = styled.div`
     justify-content: space-between;
     align-items: center;
 
-    .google-login-button {
-      margin-right: 10px;
+    .login {
+      padding: 10px 20px;
+      margin-right: 25px;
       display: flex;
       align-items: center;
-      border-radius: 30px;
+      border-radius: 10px;
       border: 1px solid #d6d3d3;
       background-color: #fff;
     }
@@ -111,13 +103,13 @@ const HeaderWrap = styled.div`
     }
 
     .my-page {
-      margin-left: 20px;
+      margin-left: 25px;
+      margin-right: 25px;
       border-radius: 10px;
       border: none;
       padding: 10px 15px;
       color: #fff;
       background-color: #4485f4;
-      margin-right: 10px;
     }
   }
 `;
