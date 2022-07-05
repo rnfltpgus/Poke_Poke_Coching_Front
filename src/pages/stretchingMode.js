@@ -6,6 +6,7 @@ import TextCard from '../components/TextCard';
 import styled from 'styled-components';
 import ProgressBar from '../components/ProgressBar';
 import TurtleNeck from '../components/TurtleNeck';
+import TurtleMode from '../components/TurtleMode';
 
 const stretchingMode = () => {
   return (
@@ -17,6 +18,7 @@ const stretchingMode = () => {
         <div className='stretchingMode'>
           {/* <Camera /> */}
           {/* <TurtleNeck /> */}
+          <TurtleMode />
         </div>
       </div>
       <TextCard />
