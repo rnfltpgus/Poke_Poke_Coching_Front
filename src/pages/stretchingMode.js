@@ -5,6 +5,7 @@ import TextCard from '../components/TextCard';
 
 import styled from 'styled-components';
 import ProgressBar from '../components/ProgressBar';
+import TurtleNeck from '../components/TurtleNeck';
 
 const stretchingMode = () => {
   return (
@@ -14,7 +15,8 @@ const stretchingMode = () => {
           <span className='stretchingMode-title'>거북목 교정 스트레칭</span>
         </div>
         <div className='stretchingMode'>
-          <Camera />
+          {/* <Camera /> */}
+          {/* <TurtleNeck /> */}
         </div>
       </div>
       <TextCard />

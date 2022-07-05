@@ -23,7 +23,7 @@ function Camera() {
   };
 
   // 실제로 감시를 하는 부분의 function
-  const poseDetect = async (net) => {
+  const poseDetect = async (poseNetLoad) => {
     if (
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current !== null &&
@@ -31,15 +31,14 @@ function Camera() {
     ) {
       // Get Video Properties
       const video = webcamRef.current.video;
-      const videoWidth = webcamRef.current.video.videoWidth;
-      const videoHeight = webcamRef.current.video.videoHeight;
+      const { videoWidth, videoHeight } = webcamRef.current.video;
 
       // Set video width
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
       // Make Detections
-      const pose = await net.estimateSinglePose(video);
+      const pose = await poseNetLoad.estimateSinglePose(video);
       console.log('🔥 현재 좌표값', pose);
 
       drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
@@ -52,8 +51,9 @@ function Camera() {
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    drawKeyPoints(pose.keypoints, 0.5, context);
-    drawSkeleton(pose.keypoints, 0.5, context);
+    // 0.6 이런거가 정확도를 개선할수  있느 수치, 작을수록 빠르게 감지하고 정확도가 떨어짐
+    drawKeyPoints(pose.keypoints, 0.6, context);
+    drawSkeleton(pose.keypoints, 0.6, context);
     // 원하는 부위의 이름을 찾아서 폴문으로 돌수있다.
     // ex) for(let i = 0; i < pose.keypoints.length; i++)
   };
