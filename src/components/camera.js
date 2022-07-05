@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
-import * as posenet from '@tensorflow-models/posenet';
 import Webcam from 'react-webcam';
+import * as posenet from '@tensorflow-models/posenet';
+
 import { drawKeyPoints, drawSkeleton } from '../util/utils';
 
 import styled from 'styled-components';
@@ -46,14 +47,13 @@ function Camera() {
   };
 
   const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+    const minPartConfidence = 0.6;
     const context = canvas.current.getContext('2d');
-    canvas.current.video = video;
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    // 0.6 이런거가 정확도를 개선할수  있느 수치, 작을수록 빠르게 감지하고 정확도가 떨어짐
-    drawKeyPoints(pose.keypoints, 0.6, context);
-    drawSkeleton(pose.keypoints, 0.6, context);
+    drawKeyPoints(pose.keypoints, minPartConfidence, context);
+    drawSkeleton(pose.keypoints, minPartConfidence, context);
     // 원하는 부위의 이름을 찾아서 폴문으로 돌수있다.
     // ex) for(let i = 0; i < pose.keypoints.length; i++)
   };
