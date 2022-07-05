@@ -3,6 +3,8 @@ import * as posenet from '@tensorflow-models/posenet';
 import Webcam from 'react-webcam';
 import { drawKeyPoints, drawSkeleton } from '../util/utils';
 
+import styled from 'styled-components';
+
 function Camera() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -11,7 +13,7 @@ function Camera() {
   // 실제로 여기서 전체의 기능을 로드하는 부분
   const runPoseNet = async () => {
     const poseNetLoad = await posenet.load({
-      inputResolution: { width: 640, height: 480 }, // 입력해상도
+      // inputResolution: { width: 640, height: 600 }, // 입력해상도
       scale: 0.6, // 수가 짦을 수록 빠르게 결과를 엊을수 있음
     });
 
@@ -59,38 +61,38 @@ function Camera() {
   runPoseNet();
 
   return (
-    <div className='Camera'>
-      <Webcam
-        ref={webcamRef}
-        style={{
-          position: 'absolute',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          left: 0,
-          right: 0,
-          textAlign: 'center',
-          zindex: 9,
-          width: 640,
-          height: 600,
-        }}
-      />
-
-      <canvas
-        ref={canvasRef}
-        style={{
-          position: 'absolute',
-          marginLeft: 'auto',
-          marginRight: 'auto',
-          left: 0,
-          right: 0,
-          textAlign: 'center',
-          zindex: 9,
-          width: 640,
-          height: 600,
-        }}
-      />
-    </div>
+    <CameraWrap>
+      <Webcam ref={webcamRef} className='webcam' />
+      <canvas ref={canvasRef} className='canvas' />
+    </CameraWrap>
   );
 }
 
 export default Camera;
+
+const CameraWrap = styled.div`
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 9;
+  width: 100%;
+  height: 100%;
+
+  .webcam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+`;

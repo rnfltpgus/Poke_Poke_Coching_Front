@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
-import Header from '../components/header';
+import Header from '../components/Header';
 import Main from '../pages/Main';
 import Login from '../pages/Login';
 import MyPage from '../pages/MyPage';
-import StudyMode from '../pages/studyMode';
-import StretchingMode from '../pages/stretchingMode';
+import StudyMode from '../pages/StudyMode';
+import StretchingMode from '../pages/StretchingMode';
 
 import GlobalStyles from './GlobalStyles';
 
