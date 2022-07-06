@@ -1,46 +1,81 @@
-import React, { useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
-import * as posenet from '@tensorflow-models/posenet';
+import * as poseNet from '@tensorflow-models/posenet';
 
-import { drawKeyPoints, drawSkeleton } from '../util/utils';
+import { drawKeyPoints, drawSkeleton } from '../util/helpers/utils';
+import { count } from '../util/music/index';
 
 import styled from 'styled-components';
+
+let flag = false;
 
 const TurtleNeck = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const [startingTime, setStartingTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [poseTime, setPoseTime] = useState(0);
+  const [bestPerform, setBestPerform] = useState(0);
 
-  let pose_status = 2;
-  let keep_time = [0, 0, 0];
-  let result_message = '';
+  useEffect(() => {
+    const timeDiff = (currentTime - startingTime) / 1000;
+    if (flag) {
+      setPoseTime(timeDiff);
+    }
+    if ((currentTime - startingTime) / 1000 > bestPerform) {
+      setBestPerform(timeDiff);
+    }
+  }, [currentTime]);
+
+  useEffect(() => {
+    setCurrentTime(0);
+    setPoseTime(0);
+    setBestPerform(0);
+  }, []);
 
   const runPoseNet = async () => {
-    const poseNetLoad = await posenet.load({
-      scale: 0.6,
+    const poseNetLoad = await poseNet.load({
+      scale: 0.8,
     });
 
+    const countAudio = new Audio(count);
+    countAudio.loop = true;
+
     setInterval(() => {
-      poseDetect(poseNetLoad);
-      window.parent.postMessage({ message: pose_count }, '*');
+      poseDetect(poseNetLoad, countAudio);
     }, 100);
   };
 
-  const poseDetect = async (poseNetLoad) => {
+  const poseDetect = async (poseNetLoad, countAudio) => {
     if (
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current !== null &&
       webcamRef.current.video.readyState === 4
     ) {
       const video = webcamRef.current.video;
-      const videoWidth = webcamRef.current.video.videoWidth;
-      const videoHeight = webcamRef.current.video.videoHeight;
+      const { videoWidth, videoHeight } = webcamRef.current.video;
 
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      // console.log('🔥 현재 좌표값', pose);
-      check_Pose2(pose);
+
+      const correctPosture = checkHandsUpDown(pose);
+
+      if (pose.score > 0.7) {
+        if (correctPosture === true) {
+          if (!flag) {
+            countAudio.play();
+            setStartingTime(new Date(Date()).getTime());
+            flag = true;
+          }
+          setCurrentTime(new Date(Date()).getTime());
+        } else {
+          flag = false;
+          countAudio.pause();
+          countAudio.currentTime = 0;
+        }
+      }
 
       drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
@@ -56,69 +91,16 @@ const TurtleNeck = () => {
     drawSkeleton(pose.keypoints, minPartConfidence, context);
   };
 
-  let count_time = setInterval(function () {
-    if (pose_count >= 7) {
-      clearInterval(count_time);
-      result_message = 'Success';
-      window.parent.postMessage({ message: result_message }, '*');
-    } else if (keep_time[2] >= 30) {
-      clearInterval(count_time);
+  const checkHandsUpDown = (pose) => {
+    const head = pose.keypoints[0].position;
+    const ls = pose.keypoints[5].position;
+    const rs = pose.keypoints[6].position;
+    const le = pose.keypoints[7].position;
+    const re = pose.keypoints[8].position;
+    const lw = pose.keypoints[9].position;
+    const rw = pose.keypoints[10].position;
 
-      result_message = 'Fail';
-      window.parent.postMessage({ message: result_message }, '*');
-    }
-    keep_time[2]++;
-  }, 1000);
-
-  //Stretch - Stand - HandsUp - Stand: 1회
-  let pose_count = 0;
-  let tmp = [0, 0];
-
-  function check_Pose2(pose) {
-    if (check_Stand(pose)) {
-      pose_status = 2;
-      if (tmp[0] == 1 && tmp[1] == 1) {
-        tmp[0] = tmp[1] = 0;
-        pose_count++;
-        window.parent.postMessage({ message: pose_count }, '*');
-      }
-    } else if (check_Stretch(pose)) {
-      tmp[0] = 1;
-      pose_status = 0;
-    } else if (check_HandsUp(pose) && tmp[0] == 1) {
-      tmp[1] = 1;
-      pose_status = 1;
-    }
-    if (tmp[0] == 0 && tmp[1] == 0 && tmp[2] == 0 && check_Stretch(pose)) {
-      tmp[0] = 1;
-    } else if (tmp[0] == 1 && tmp[1] == 0 && tmp[2] == 0 && check_Stand(pose)) {
-      tmp[1] = 1;
-    } else if (
-      tmp[0] == 1 &&
-      tmp[1] == 1 &&
-      tmp[2] == 0 &&
-      check_HandsUp(pose)
-    ) {
-      tmp[2] = 1;
-    } else if (tmp[0] == 1 && tmp[1] == 1 && tmp[2] == 1 && check_Stand(pose)) {
-      tmp[0] = tmp[1] = tmp[2] = 0;
-      pose_count++;
-      result_label = pose_count + '회';
-    }
-  }
-
-  function check_HandsUp(pose) {
-    const head = pose.keypoints[0].position; //머리(코)
-    const rw = pose.keypoints[10].position; //오른쪽 손목
-    const re = pose.keypoints[8].position; //오른쪽 팔꿈치
-    const rs = pose.keypoints[6].position; //오른쪽 어깨
-    const lw = pose.keypoints[9].position; //왼쪽 손목
-    const le = pose.keypoints[7].position; //왼쪽 팔꿈치
-    const ls = pose.keypoints[5].position; //왼쪽 어깨
-
-    //팔꿈치가 어깨보다 높을 것, 양 팔꿈치 사이에 머리가 위치할 것
     if (re.y < rs.y && le.y < ls.y && re.x < head.x && head.x < le.x) {
-      //어깨 사이의 거리보다 팔꿈치/어깨 사이의 거리가 짧을 것
       const shoulder = ls.x - rs.x;
       if (shoulder > rs.x - re.x && shoulder > le.x - ls.x) {
         return true;
@@ -128,73 +110,14 @@ const TurtleNeck = () => {
     } else {
       return false;
     }
-  }
-
-  function check_Stretch(pose) {
-    const head = pose.keypoints[0].position; //머리(코)
-    const rw = pose.keypoints[10].position; //오른쪽 손목
-    const re = pose.keypoints[8].position; //오른쪽 팔꿈치
-    const rs = pose.keypoints[6].position; //오른쪽 어깨
-    const lw = pose.keypoints[9].position; //왼쪽 손목
-    const le = pose.keypoints[7].position; //왼쪽 팔꿈치
-    const ls = pose.keypoints[5].position; //왼쪽 어깨
-    const rb = pose.keypoints[12].position; //body(오른쪽 골반)
-    const lb = pose.keypoints[11].position; //body(왼쪽 골반)
-
-    //팔이 머리보단 낮고, 골반보다 높을 것
-    if (head.y < re.y && head.y < le.y && re.y < rb.y && le.y < lb.y) {
-      if (
-        re.x < rs.x &&
-        rs.x < head.x &&
-        head.x < ls.x &&
-        ls.x < le.x &&
-        (rw.x < re.x || le.x < lw.x)
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-    return false;
-  }
-
-  function check_Stand(pose) {
-    const head = pose.keypoints[0].position; //머리(코)
-    const rw = pose.keypoints[10].position; //오른쪽 손목
-    const re = pose.keypoints[8].position; //오른쪽 팔꿈치
-    const rs = pose.keypoints[6].position; //오른쪽 어깨
-    const lw = pose.keypoints[9].position; //왼쪽 손목
-    const le = pose.keypoints[7].position; //왼쪽 팔꿈치
-    const ls = pose.keypoints[5].position; //왼쪽 어깨
-    const rb = pose.keypoints[12].position; //body(오른쪽 골반)
-    const lb = pose.keypoints[11].position; //body(왼쪽 골반)
-
-    //머리 - 어깨 - 팔꿈치 - 골반 - 손목 (y좌표)
-    if (
-      head.y < rs.y &&
-      head.y < ls.y &&
-      rs.y < re.y &&
-      ls.y < le.y &&
-      re.y < rw.y &&
-      le.y < lw.y &&
-      (rb.y < rw.y || lb.y < lw.y)
-    ) {
-      //어깨의 길이보다 손목/골반 사이의 길이가 작을 것
-      const shoulder = ls.x - rs.x;
-      if (shoulder > rb.x - rw.x || shoulder > lw.x - lb.x) {
-        return true;
-      } else {
-        return true;
-      }
-    } else {
-      return false;
-    }
-  }
+  };
 
   runPoseNet();
 
   return (
     <TurtleNeckWrap>
+      <h4>Count Down: {poseTime} s</h4>
+      <h4>Maintain Time: {bestPerform} s</h4>
       <Webcam ref={webcamRef} className='webcam' />
       <canvas ref={canvasRef} className='canvas' />
     </TurtleNeckWrap>

@@ -1,12 +1,9 @@
 import React from 'react';
 
-import Camera from '../components/Camera';
+import TurtleNeck from '../components/TurtleNeck';
 import TextCard from '../components/TextCard';
 
 import styled from 'styled-components';
-import ProgressBar from '../components/ProgressBar';
-import TurtleNeck from '../components/TurtleNeck';
-import TurtleMode from '../components/TurtleMode';
 
 const stretchingMode = () => {
   return (
@@ -16,13 +13,10 @@ const stretchingMode = () => {
           <span className='stretchingMode-title'>거북목 교정 스트레칭</span>
         </div>
         <div className='stretchingMode'>
-          {/* <Camera /> */}
-          {/* <TurtleNeck /> */}
-          <TurtleMode />
+          <TurtleNeck />
         </div>
       </div>
       <TextCard />
-      <ProgressBar />
     </StretchingWrap>
   );
 };

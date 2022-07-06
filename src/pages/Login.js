@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleButton } from 'react-google-button';
-
-import userState from '../recoil/user';
-
 import { useRecoilValue } from 'recoil';
-
+import userState from '../recoil/user';
 import { signInWithGoogle } from '../auth/firebase';
 
 import styled from 'styled-components';
