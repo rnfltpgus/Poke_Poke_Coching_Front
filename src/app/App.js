@@ -6,7 +6,7 @@ import Main from '../pages/Main';
 import Login from '../pages/Login';
 import MyPage from '../pages/MyPage';
 import StudyMode from '../pages/StudyMode';
-import StretchingMode from '../pages/StretchingMode';
+import StretchingMode from '../pages/stretchingMode';
 
 import GlobalStyles from './GlobalStyles';
 
