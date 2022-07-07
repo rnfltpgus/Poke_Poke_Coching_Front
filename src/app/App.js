@@ -5,8 +5,8 @@ import Header from '../components/Header';
 import Main from '../pages/Main';
 import Login from '../pages/Login';
 import MyPage from '../pages/MyPage';
-import StudyMode from '../pages/StudyMode';
-import StretchingMode from '../pages/stretchingMode';
+import StudyPage from '../pages/StudyPage';
+import StretchingPage from '../pages/stretchingPage';
 
 import GlobalStyles from './GlobalStyles';
 
@@ -28,8 +28,8 @@ const App = () => {
         <Route path='/login' element={<Login />} />
         <Route path='/' element={<Main />} />
         <Route path='/mypage' element={<MyPage />} />
-        <Route path='/studymode' element={<StudyMode />} />
-        <Route path='/stretchingmode' element={<StretchingMode />} />
+        <Route path='/studypage' element={<StudyPage />} />
+        <Route path='/stretchingpage' element={<StretchingPage />} />
       </Routes>
     </>
   );

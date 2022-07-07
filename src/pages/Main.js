@@ -6,13 +6,13 @@ import styled from 'styled-components';
 const Main = () => {
   return (
     <SelectMode>
-      <Link to='/studyMode'>
-        <div className='studyMode'>
+      <Link to='/studypage'>
+        <div className='study-page'>
           <span>공부모드</span>
         </div>
       </Link>
-      <Link to='/stretchingMode'>
-        <div className='stretchingMode'>
+      <Link to='/stretchingpage'>
+        <div className='stretching-page'>
           <span>거북목 스트레이칭 모드</span>
         </div>
       </Link>
@@ -51,12 +51,12 @@ const SelectMode = styled.div`
     border-radius: 10px;
   }
 
-  .studyMode {
+  .study-page {
     background-image: url('img/studymode.png');
     background-size: cover;
   }
 
-  .stretchingMode {
+  .stretching-page {
     background-image: url('img/stretchingmode.png');
     background-size: cover;
   }

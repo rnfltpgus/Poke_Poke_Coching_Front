@@ -59,7 +59,7 @@ const TurtleNeck = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const correctPosture = checkHandsUpDown(pose);
+      const correctPosture = checkWristUpDown(pose);
 
       if (pose.score > 0.7) {
         if (correctPosture === true) {
@@ -90,25 +90,25 @@ const TurtleNeck = () => {
     drawSkeleton(pose.keypoints, minPartConfidence, context);
   };
 
-  const checkHandsUpDown = (pose) => {
+  const checkWristUpDown = (pose) => {
     const head = pose.keypoints[0].position;
     const left_Shoulder = pose.keypoints[5].position;
-    const right_Shoulder = pose.keypoints[6].position;
     const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
     const left_Wrist = pose.keypoints[9].position;
+    const right_Shoulder = pose.keypoints[6].position;
+    const right_Elbow = pose.keypoints[8].position;
     const right_Wrist = pose.keypoints[10].position;
 
     if (
-      right_Elbow.y < right_Shoulder.y &&
-      left_Elbow.y < left_Shoulder.y &&
+      right_Wrist.y < right_Shoulder.y &&
+      left_Wrist.y < left_Shoulder.y &&
       right_Elbow.x < head.x &&
       head.x < left_Elbow.x
     ) {
       const shoulder = left_Shoulder.x - right_Shoulder.x;
       if (
-        shoulder < right_Shoulder.x - right_Elbow.x &&
-        shoulder < left_Elbow.x - left_Shoulder.x
+        shoulder > right_Shoulder.x - right_Elbow.x &&
+        shoulder > left_Elbow.x - left_Shoulder.x
       ) {
         return true;
       } else {

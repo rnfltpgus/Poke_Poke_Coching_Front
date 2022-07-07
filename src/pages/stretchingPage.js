@@ -5,14 +5,14 @@ import TextCard from '../components/TextCard';
 
 import styled from 'styled-components';
 
-const stretchingMode = () => {
+const stretchingPage = () => {
   return (
     <StretchingWrap>
       <div className='stretching-container'>
-        <div className='stretchingEx'>
-          <span className='stretchingMode-title'>거북목 교정 스트레칭</span>
+        <div className='stretching-ex'>
+          <span className='stretching-mode-title'>거북목 교정 스트레칭</span>
         </div>
-        <div className='stretchingMode'>
+        <div className='stretching-mode'>
           <TurtleNeck />
         </div>
       </div>
@@ -21,7 +21,7 @@ const stretchingMode = () => {
   );
 };
 
-export default stretchingMode;
+export default stretchingPage;
 
 const StretchingWrap = styled.div`
   & div {
@@ -42,17 +42,17 @@ const StretchingWrap = styled.div`
     display: flex;
   }
 
-  .stretchingEx {
+  .stretching-ex {
     background-image: url('img/stretchingMode.gif');
     background-size: cover;
     height: 700px;
   }
 
-  .stretchingMode {
+  .stretching-mode {
     height: 700px;
   }
 
-  .stretchingMode-title {
+  .stretching-mode-title {
     float: left;
     background-color: #87ecfa;
     margin-top: 10px;
