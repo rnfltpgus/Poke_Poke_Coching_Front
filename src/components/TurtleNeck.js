@@ -59,7 +59,6 @@ const TurtleNeck = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-
       const correctPosture = checkHandsUpDown(pose);
 
       if (pose.score > 0.7) {
@@ -93,16 +92,24 @@ const TurtleNeck = () => {
 
   const checkHandsUpDown = (pose) => {
     const head = pose.keypoints[0].position;
-    const ls = pose.keypoints[5].position;
-    const rs = pose.keypoints[6].position;
-    const le = pose.keypoints[7].position;
-    const re = pose.keypoints[8].position;
-    const lw = pose.keypoints[9].position;
-    const rw = pose.keypoints[10].position;
+    const left_Shoulder = pose.keypoints[5].position;
+    const right_Shoulder = pose.keypoints[6].position;
+    const left_Elbow = pose.keypoints[7].position;
+    const right_Elbow = pose.keypoints[8].position;
+    const left_Wrist = pose.keypoints[9].position;
+    const right_Wrist = pose.keypoints[10].position;
 
-    if (re.y < rs.y && le.y < ls.y && re.x < head.x && head.x < le.x) {
-      const shoulder = ls.x - rs.x;
-      if (shoulder > rs.x - re.x && shoulder > le.x - ls.x) {
+    if (
+      right_Elbow.y < right_Shoulder.y &&
+      left_Elbow.y < left_Shoulder.y &&
+      right_Elbow.x < head.x &&
+      head.x < left_Elbow.x
+    ) {
+      const shoulder = left_Shoulder.x - right_Shoulder.x;
+      if (
+        shoulder < right_Shoulder.x - right_Elbow.x &&
+        shoulder < left_Elbow.x - left_Shoulder.x
+      ) {
         return true;
       } else {
         return false;
@@ -116,8 +123,8 @@ const TurtleNeck = () => {
 
   return (
     <TurtleNeckWrap>
-      <h4>Count Down: {poseTime} s</h4>
-      <h4>Maintain Time: {bestPerform} s</h4>
+      <h4 className='count-down'>Count Down: {poseTime} s</h4>
+      <h4 className='maintain-time'>Maintain Time: {bestPerform} s</h4>
       <Webcam ref={webcamRef} className='webcam' />
       <canvas ref={canvasRef} className='canvas' />
     </TurtleNeckWrap>
@@ -133,22 +140,37 @@ const TurtleNeckWrap = styled.div`
   left: 0;
   right: 0;
   text-align: center;
-  z-index: 9;
   width: 100%;
   height: 100%;
 
+  & h4 {
+    margin-bottom: 5px;
+  }
+
+  .count-down {
+    background-color: #ffc3a0;
+    padding: 5px;
+    border-radius: 10px;
+  }
+
+  .maintain-time {
+    background-color: #ffafbd;
+    padding: 5px;
+    border-radius: 10px;
+  }
+
   .webcam {
     position: absolute;
-    top: 0;
+    top: 105px;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 600px;
   }
   .canvas {
     position: absolute;
-    top: 0;
+    top: 105px;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 600px;
   }
 `;

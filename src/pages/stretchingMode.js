@@ -37,7 +37,7 @@ const StretchingWrap = styled.div`
   .stretching-container {
     border-radius: 10px;
     width: 95%;
-    margin: 30px auto 20px auto;
+    margin: 30px auto 10px auto;
     gap: 2rem;
     display: flex;
   }
@@ -45,11 +45,11 @@ const StretchingWrap = styled.div`
   .stretchingEx {
     background-image: url('img/stretchingMode.gif');
     background-size: cover;
-    height: 600px;
+    height: 700px;
   }
 
   .stretchingMode {
-    height: 600px;
+    height: 700px;
   }
 
   .stretchingMode-title {

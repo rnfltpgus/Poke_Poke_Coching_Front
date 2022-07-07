@@ -39,7 +39,7 @@ const SelectMode = styled.div`
     text-align: center;
     color: black;
     flex: 1;
-    height: 600px;
+    height: 700px;
     box-sizing: border-box;
     font-weight: bold;
   }
