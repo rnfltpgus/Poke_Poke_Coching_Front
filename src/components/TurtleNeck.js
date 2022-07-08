@@ -25,7 +25,7 @@ const TurtleNeck = () => {
     if ((currentTime - startingTime) / 1000 > bestPerform) {
       setBestPerform(timeDiff);
     }
-  }, [currentTime]);
+  }, [bestPerform, currentTime, startingTime]);
 
   useEffect(() => {
     setCurrentTime(0);
@@ -61,8 +61,14 @@ const TurtleNeck = () => {
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = checkWristUpDown(pose);
 
-      if (pose.score > 0.7) {
-        if (correctPosture === true) {
+      console.log(
+        '🔥 correctPosture 값 확인 - 프로젝트 끝날 때 삭제할 예정',
+        // correctPosture,
+        pose,
+      );
+
+      if (correctPosture === true) {
+        if (pose.score > 0.62) {
           if (!flag) {
             countAudio.play();
             setStartingTime(new Date(Date()).getTime());
@@ -76,13 +82,14 @@ const TurtleNeck = () => {
         }
       }
 
-      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
+      // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   };
 
   const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
-    const minPartConfidence = 0.6;
+    const minPartConfidence = 0.7;
     const context = canvas.current.getContext('2d');
+
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
