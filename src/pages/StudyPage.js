@@ -1,21 +1,24 @@
 import React from 'react';
 
 import StudyMode from '../components/StudyMode';
+import SetMode from '../components/SetMode';
 
 import styled from 'styled-components';
 
-function studyPage() {
+const studyPage = () => {
   return (
     <StudyWrap>
       <div className='stretching-container'>
         <div className='study-mode'>
           <StudyMode />
         </div>
-        <div className='select-mode'></div>
+        <div className='select-mode'>
+          <SetMode />
+        </div>
       </div>
     </StudyWrap>
   );
-}
+};
 
 export default studyPage;
 

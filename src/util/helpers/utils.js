@@ -7,8 +7,6 @@ const lineWidth = 5;
 
 export const tryResNetButtonName = 'tryResNetButton';
 export const tryResNetButtonText = '[New] Try ResNet50';
-const tryResNetButtonTextCss = 'width:100%;text-decoration:underline;';
-const tryResNetButtonBackgroundCss = 'background:#e61d5f;';
 
 function toTuple({ y, x }) {
   return [y, x];
