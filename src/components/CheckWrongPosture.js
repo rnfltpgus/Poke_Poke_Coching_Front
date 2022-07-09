@@ -1,0 +1,26 @@
+import React from 'react';
+
+import styled from 'styled-components';
+
+const CheckWrongPosture = () => {
+  return (
+    <CheckWrongPostureWrap>
+      <div className='CheckWrongPosture-header'>CheckWrongPosture</div>
+    </CheckWrongPostureWrap>
+  );
+};
+
+export default CheckWrongPosture;
+
+const CheckWrongPostureWrap = styled.div`
+  width: 95%;
+  margin: 20px auto 10px auto;
+  gap: 2rem;
+
+  .CheckWrongPosture-header {
+    background-color: #948df9;
+    margin: 10px 30px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+`;

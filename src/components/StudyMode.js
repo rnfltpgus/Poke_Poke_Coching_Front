@@ -66,6 +66,7 @@ const StudyMode = () => {
           countAudio.pause();
         }
       }
+
       // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   };
@@ -128,7 +129,9 @@ const StudyModeWrap = styled.div`
     width: 100%;
     height: 600px;
   }
+
   .canvas {
+    z-index: 10;
     position: absolute;
     top: 60px;
     left: 0;
