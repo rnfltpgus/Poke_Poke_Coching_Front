@@ -5,7 +5,7 @@ import TextCard from '../components/TextCard';
 
 import styled from 'styled-components';
 
-const stretchingPage = () => {
+const StretchingPage = () => {
   return (
     <StretchingWrap>
       <div className='stretching-container'>
@@ -21,7 +21,7 @@ const stretchingPage = () => {
   );
 };
 
-export default stretchingPage;
+export default StretchingPage;
 
 const StretchingWrap = styled.div`
   & div {

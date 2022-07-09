@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
 
-import { drawKeyPoints, drawSkeleton } from '../util/helpers/utils';
 import { count } from '../util/music/index';
 
 import styled from 'styled-components';
@@ -11,11 +10,14 @@ let flag = false;
 
 const TurtleNeck = () => {
   const webcamRef = useRef(null);
-  const canvasRef = useRef(null);
   const [startingTime, setStartingTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [poseTime, setPoseTime] = useState(0);
   const [bestPerform, setBestPerform] = useState(0);
+
+  useEffect(() => {
+    runPoseNet();
+  }, []);
 
   useEffect(() => {
     const timeDiff = (currentTime - startingTime) / 1000;
@@ -25,17 +27,11 @@ const TurtleNeck = () => {
     if ((currentTime - startingTime) / 1000 > bestPerform) {
       setBestPerform(timeDiff);
     }
-  }, [bestPerform, currentTime, startingTime]);
-
-  useEffect(() => {
-    setCurrentTime(0);
-    setPoseTime(0);
-    setBestPerform(0);
-  }, []);
+  }, [currentTime, startingTime]);
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
-      scale: 0.8,
+      scale: 0.3,
     });
 
     const countAudio = new Audio(count);
@@ -43,7 +39,7 @@ const TurtleNeck = () => {
 
     setInterval(() => {
       poseDetect(poseNetLoad, countAudio);
-    }, 100);
+    }, 1000);
   };
 
   const poseDetect = async (poseNetLoad, countAudio) => {
@@ -61,11 +57,12 @@ const TurtleNeck = () => {
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = checkWristUpDown(pose);
 
-      console.log(
-        '🔥 correctPosture 값 확인 - 프로젝트 끝날 때 삭제할 예정',
-        // correctPosture,
-        pose,
-      );
+      // console.log(
+      //   '🔥 correctPosture 값 확인 - 프로젝트 끝날 때 삭제할 예정',
+      //   correctPosture,
+      //   // pose,
+      //   pose.score,
+      // );
 
       if (correctPosture === true) {
         if (pose.score > 0.62) {
@@ -78,23 +75,10 @@ const TurtleNeck = () => {
         } else {
           flag = false;
           countAudio.pause();
-          countAudio.currentTime = 0;
+          setCurrentTime(0);
         }
       }
-
-      // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
-  };
-
-  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
-    const minPartConfidence = 0.7;
-    const context = canvas.current.getContext('2d');
-
-    canvas.current.width = videoWidth;
-    canvas.current.height = videoHeight;
-
-    drawKeyPoints(pose.keypoints, minPartConfidence, context);
-    drawSkeleton(pose.keypoints, minPartConfidence, context);
   };
 
   const checkWristUpDown = (pose) => {
@@ -107,12 +91,13 @@ const TurtleNeck = () => {
     const right_Wrist = pose.keypoints[10].position;
 
     if (
-      right_Wrist.y < right_Shoulder.y &&
-      left_Wrist.y < left_Shoulder.y &&
+      right_Wrist.y > right_Shoulder.y &&
+      left_Wrist.y > left_Shoulder.y &&
       right_Elbow.x < head.x &&
       head.x < left_Elbow.x
     ) {
       const shoulder = left_Shoulder.x - right_Shoulder.x;
+
       if (
         shoulder > right_Shoulder.x - right_Elbow.x &&
         shoulder > left_Elbow.x - left_Shoulder.x
@@ -126,14 +111,11 @@ const TurtleNeck = () => {
     }
   };
 
-  runPoseNet();
-
   return (
     <TurtleNeckWrap>
       <h4 className='count-down'>Count Down: {poseTime} s</h4>
       <h4 className='maintain-time'>Maintain Time: {bestPerform} s</h4>
       <Webcam ref={webcamRef} className='webcam' />
-      <canvas ref={canvasRef} className='canvas' />
     </TurtleNeckWrap>
   );
 };

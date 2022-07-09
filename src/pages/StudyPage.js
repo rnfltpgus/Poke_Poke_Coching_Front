@@ -1,7 +1,10 @@
 import React from 'react';
 
 import StudyMode from '../components/StudyMode';
-import SetMode from '../components/SetMode';
+import RealTimeClock from '../components/RealTimeClock';
+import CountDownTimer from '../components/CountDownTimer';
+import StopWatch from '../components/StopWatch';
+import CheckWrongPosture from '../components/CheckWrongPosture';
 
 import styled from 'styled-components';
 
@@ -9,11 +12,14 @@ const studyPage = () => {
   return (
     <StudyWrap>
       <div className='stretching-container'>
-        <div className='study-mode'>
+        <div className='webcam-view'>
           <StudyMode />
         </div>
-        <div className='select-mode'>
-          <SetMode />
+        <div className='function-mode'>
+          <RealTimeClock />
+          <CountDownTimer />
+          <StopWatch />
+          <CheckWrongPosture />
         </div>
       </div>
     </StudyWrap>
@@ -41,11 +47,13 @@ const StudyWrap = styled.div`
     display: flex;
   }
 
-  .study-mode {
+  .webcam-view {
+    background-color: #faf5d5;
     height: 700px;
   }
 
-  .select-mode {
+  .function-mode {
+    background-color: #d4d1ff;
     height: 700px;
   }
 `;

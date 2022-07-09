@@ -6,7 +6,7 @@ import Main from '../pages/Main';
 import Login from '../pages/Login';
 import MyPage from '../pages/MyPage';
 import StudyPage from '../pages/StudyPage';
-import StretchingPage from '../pages/stretchingPage';
+import StretchingPage from '../pages/StretchingPage';
 
 import GlobalStyles from './GlobalStyles';
 
