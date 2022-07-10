@@ -251,4 +251,8 @@ const CountDownTimerWrap = styled.div`
   .pause-btn {
     margin-right: 10px;
   }
+
+  .countdown-time {
+    font-size: 18px;
+  }
 `;

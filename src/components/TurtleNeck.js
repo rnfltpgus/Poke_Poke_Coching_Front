@@ -77,10 +77,10 @@ const TurtleNeck = () => {
   const checkWristUpDown = (pose) => {
     const head = pose.keypoints[0].position;
     const left_Shoulder = pose.keypoints[5].position;
-    const left_Elbow = pose.keypoints[7].position;
-    const left_Wrist = pose.keypoints[9].position;
     const right_Shoulder = pose.keypoints[6].position;
+    const left_Elbow = pose.keypoints[7].position;
     const right_Elbow = pose.keypoints[8].position;
+    const left_Wrist = pose.keypoints[9].position;
     const right_Wrist = pose.keypoints[10].position;
 
     if (
@@ -106,8 +106,8 @@ const TurtleNeck = () => {
 
   return (
     <TurtleNeckWrap>
-      <h4 className='count-down'>Count Down : {poseTime} s</h4>
-      <h4 className='maintain-time'>Maintain Time : {bestPerform} s</h4>
+      <div className='count-down'>Count Down : {poseTime} s</div>
+      <div className='maintain-time'>Maintain Time : {bestPerform} s</div>
       <Webcam ref={webcamRef} className='webcam' />
     </TurtleNeckWrap>
   );
@@ -125,7 +125,7 @@ const TurtleNeckWrap = styled.div`
   width: 100%;
   height: 100%;
 
-  & h4 {
+  & div {
     margin-bottom: 5px;
   }
 

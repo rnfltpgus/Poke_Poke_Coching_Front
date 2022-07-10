@@ -25,6 +25,7 @@ const CardWrap = styled.div`
   border-radius: 10px;
 
   .text-area-title {
+    margin-bottom: 5px;
     background-color: #948df9;
   }
 
