@@ -23,7 +23,7 @@ const CheckWrongPostureWrap = styled.div`
   gap: 2rem;
 
   .CheckWrongPosture-header {
-    background-color: #948df9;
+    background-color: #f17ca4;
     margin: 10px 30px;
     padding: 0 10px;
     border-radius: 10px;

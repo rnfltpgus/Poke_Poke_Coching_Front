@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
+import { useNavigate } from 'react-router-dom';
 import * as poseNet from '@tensorflow-models/posenet';
 import { useSetRecoilState, useResetRecoilState } from 'recoil';
 
 import { conditionState } from '../recoil/atom';
-import { drawKeyPoints, drawSkeleton } from '../util/helpers/utils';
+import { drawKeyPoints, drawSkeleton } from '../util/tensorflow/utils';
 import { piano } from '../util/music/index';
 
 import styled from 'styled-components';
@@ -14,14 +15,14 @@ let interval;
 const StudyMode = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
+  const navigate = useNavigate();
   const [isStartPose, setIsStartPose] = useState(false);
   const condition = useSetRecoilState(conditionState);
   const resetCount = useResetRecoilState(conditionState);
-  const [filter, SetFilter] = useState();
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
-      scale: 0.7,
+      scale: 0.8,
     });
 
     const countAudio = new Audio(piano);
@@ -32,8 +33,8 @@ const StudyMode = () => {
     }, 100);
   };
 
-  const default_Left_Eye_Position = [];
   const default_Right_Eye_Position = [];
+  const default_Left_Eye_Position = [];
   let warnings = 0;
 
   const poseDetect = async (poseNetLoad, countAudio) => {
@@ -49,36 +50,42 @@ const StudyMode = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
+      const correctPosture = circleSign(pose);
       const poseKeyPoints = pose.keypoints;
+
+      console.log(correctPosture);
 
       for (let i = 0; i < poseKeyPoints.length; i++) {
         const right_Eye = poseKeyPoints[1].position;
         const left_Eye = poseKeyPoints[2].position;
+        const right_InitialValues = default_Right_Eye_Position.length < 1;
+        const left_InitialValues = default_Right_Eye_Position.length < 1;
+        const coordinateDifference = Math.ceil(
+          right_Eye.y - default_Right_Eye_Position[0],
+        );
 
-        default_Right_Eye_Position.length < 1 &&
-          default_Right_Eye_Position.push(right_Eye.y);
-        default_Left_Eye_Position.length < 1 &&
-          default_Left_Eye_Position.push(left_Eye.y);
+        right_InitialValues && default_Right_Eye_Position.push(right_Eye.y);
+        left_InitialValues && default_Left_Eye_Position.push(left_Eye.y);
 
-        if (Math.ceil(right_Eye.y - default_Right_Eye_Position[0]) > 10) {
-          const separationGap =
-            Math.ceil(right_Eye.y - default_Right_Eye_Position[0]) > 10;
+        if (coordinateDifference > 20) {
           const waringCount = Math.floor(warnings / 100);
 
           countAudio.play();
-
-          if (separationGap) {
-            warnings = warnings + 1;
-          }
+          warnings = warnings + 1;
 
           condition({ warnings: waringCount });
         }
 
-        if (Math.ceil(right_Eye.y - default_Right_Eye_Position[0]) <= 10) {
+        if (Math.ceil(coordinateDifference <= 20)) {
           countAudio.pause();
         }
       }
-      // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
+
+      if (correctPosture) {
+        countAudio.pause();
+        navigate('/stretchingpage');
+      }
+      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   };
 
@@ -90,6 +97,52 @@ const StudyMode = () => {
 
     drawKeyPoints(pose.keypoints, minPartConfidence, context);
     drawSkeleton(pose.keypoints, minPartConfidence, context);
+  };
+
+  const checkFutureHandsUp = (pose) => {
+    const head = pose.keypoints[0].position;
+    const left_Shoulder = pose.keypoints[5].position;
+    const right_Shoulder = pose.keypoints[6].position;
+    const left_Elbow = pose.keypoints[7].position;
+    const right_Elbow = pose.keypoints[8].position;
+    const left_Wrist = pose.keypoints[9].position;
+    const right_Wrist = pose.keypoints[10].position;
+
+    if (
+      right_Elbow.y < right_Shoulder.y &&
+      left_Elbow.y < left_Shoulder.y &&
+      right_Elbow.x < head.x &&
+      head.x < left_Elbow.x
+    ) {
+      if (right_Wrist.y < head.y && left_Wrist.y < head.y) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  const circleSign = (pose) => {
+    const head = pose.keypoints[0].position;
+    const left_Elbow = pose.keypoints[7].position;
+    const right_Elbow = pose.keypoints[8].position;
+    const left_Wrist = pose.keypoints[9].position;
+    const right_Wrist = pose.keypoints[10].position;
+
+    if (checkFutureHandsUp(pose)) {
+      if (
+        (right_Elbow.x < right_Wrist.x && right_Wrist.y > right_Elbow.y) ||
+        (right_Elbow.x > right_Wrist.x && left_Elbow.y < left_Wrist.y)
+      ) {
+        console.log('🔥 지금 여기 들어오고 있니?');
+        return true;
+      }
+      return false;
+    } else {
+      return false;
+    }
   };
 
   const modeStart = () => {
@@ -165,6 +218,5 @@ const StudyModeWrap = styled.div`
   }
 
   .secondary-btn {
-    bottom: 60rem;
   }
 `;
