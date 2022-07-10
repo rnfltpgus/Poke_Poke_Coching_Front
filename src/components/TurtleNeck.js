@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
 
-import { count } from '../util/music/index';
+import { very } from '../util/music/index';
 
 import styled from 'styled-components';
 
@@ -34,7 +34,7 @@ const TurtleNeck = () => {
       scale: 0.3,
     });
 
-    const countAudio = new Audio(count);
+    const countAudio = new Audio(very);
     countAudio.loop = true;
 
     setInterval(() => {
@@ -57,15 +57,8 @@ const TurtleNeck = () => {
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = checkWristUpDown(pose);
 
-      // console.log(
-      //   '🔥 correctPosture 값 확인 - 프로젝트 끝날 때 삭제할 예정',
-      //   correctPosture,
-      //   // pose,
-      //   pose.score,
-      // );
-
       if (correctPosture === true) {
-        if (pose.score > 0.62) {
+        if (pose.score > 0.63) {
           if (!flag) {
             countAudio.play();
             setStartingTime(new Date(Date()).getTime());
@@ -113,8 +106,8 @@ const TurtleNeck = () => {
 
   return (
     <TurtleNeckWrap>
-      <h4 className='count-down'>Count Down: {poseTime} s</h4>
-      <h4 className='maintain-time'>Maintain Time: {bestPerform} s</h4>
+      <h4 className='count-down'>Count Down : {poseTime} s</h4>
+      <h4 className='maintain-time'>Maintain Time : {bestPerform} s</h4>
       <Webcam ref={webcamRef} className='webcam' />
     </TurtleNeckWrap>
   );
@@ -137,15 +130,18 @@ const TurtleNeckWrap = styled.div`
   }
 
   .count-down {
-    background-color: #ffc3a0;
+    background-color: #b1edeb;
     padding: 5px;
     border-radius: 10px;
+    font-size: 20px;
   }
 
   .maintain-time {
-    background-color: #ffafbd;
+    background-color: #4485f4;
+    color: #fff;
     padding: 5px;
     border-radius: 10px;
+    font-size: 25px;
   }
 
   .webcam {

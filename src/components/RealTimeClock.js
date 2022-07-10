@@ -36,7 +36,7 @@ export default RealTimeClock;
 
 const RealTimeClockWrap = styled.div`
   width: 95%;
-  margin: 30px auto 10px auto;
+  margin: 45px auto 10px auto;
   gap: 2rem;
 
   .realtime-header {

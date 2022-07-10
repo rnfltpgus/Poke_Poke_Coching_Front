@@ -8,7 +8,7 @@ const Main = () => {
     <SelectMode>
       <Link to='/studypage'>
         <div className='study-page'>
-          <span>공부모드</span>
+          <span>공부 모드</span>
         </div>
       </Link>
       <Link to='/stretchingpage'>
@@ -46,7 +46,7 @@ const SelectMode = styled.div`
 
   & span {
     float: left;
-    background-color: #87ecfa;
+    background-color: #d4d1ff;
     padding: 0 10px;
     border-radius: 10px;
   }

@@ -1,11 +1,16 @@
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 
+import { conditionState } from '../recoil/atom';
 import styled from 'styled-components';
 
 const CheckWrongPosture = () => {
+  const currentCondition = useRecoilValue(conditionState);
+
   return (
     <CheckWrongPostureWrap>
       <div className='CheckWrongPosture-header'>CheckWrongPosture</div>
+      <div>{currentCondition.warnings} 회</div>
     </CheckWrongPostureWrap>
   );
 };

@@ -20,15 +20,15 @@ const TextCard = () => {
 export default TextCard;
 
 const CardWrap = styled.div`
-  margin: 0 30px;
+  margin: auto 30px;
   padding: 0 10px;
   border-radius: 10px;
 
   .text-area-title {
-    background-color: #87ecfa;
+    background-color: #948df9;
   }
 
   .text-area-description {
-    background-color: #ff6464;
+    background-color: #f8e9ed;
   }
 `;

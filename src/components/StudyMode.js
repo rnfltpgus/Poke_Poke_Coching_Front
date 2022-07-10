@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
+import { useSetRecoilState, useResetRecoilState } from 'recoil';
 
+import { conditionState } from '../recoil/atom';
 import { drawKeyPoints, drawSkeleton } from '../util/helpers/utils';
 import { piano } from '../util/music/index';
 
@@ -13,6 +15,8 @@ const StudyMode = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [isStartPose, setIsStartPose] = useState(false);
+  const condition = useSetRecoilState(conditionState);
+  const resetCount = useResetRecoilState(conditionState);
   const [filter, SetFilter] = useState();
 
   const runPoseNet = async () => {
@@ -30,6 +34,7 @@ const StudyMode = () => {
 
   const default_Left_Eye_Position = [];
   const default_Right_Eye_Position = [];
+  let warnings = 0;
 
   const poseDetect = async (poseNetLoad, countAudio) => {
     if (
@@ -50,23 +55,29 @@ const StudyMode = () => {
         const right_Eye = poseKeyPoints[1].position;
         const left_Eye = poseKeyPoints[2].position;
 
-        while (default_Right_Eye_Position.length < 1) {
+        default_Right_Eye_Position.length < 1 &&
           default_Right_Eye_Position.push(right_Eye.y);
-        }
-
-        while (default_Left_Eye_Position.length < 1) {
+        default_Left_Eye_Position.length < 1 &&
           default_Left_Eye_Position.push(left_Eye.y);
-        }
 
         if (Math.ceil(right_Eye.y - default_Right_Eye_Position[0]) > 10) {
+          const separationGap =
+            Math.ceil(right_Eye.y - default_Right_Eye_Position[0]) > 10;
+          const waringCount = Math.floor(warnings / 100);
+
           countAudio.play();
+
+          if (separationGap) {
+            warnings = warnings + 1;
+          }
+
+          condition({ warnings: waringCount });
         }
 
         if (Math.ceil(right_Eye.y - default_Right_Eye_Position[0]) <= 10) {
           countAudio.pause();
         }
       }
-
       // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   };
@@ -88,12 +99,14 @@ const StudyMode = () => {
 
   const modeStop = () => {
     setIsStartPose(false);
+    resetCount();
     clearInterval(interval);
   };
 
   if (isStartPose) {
     return (
       <StudyModeWrap>
+        <span className='study-mode-title'>공부 모드</span>
         <canvas ref={canvasRef} className='canvas' />
         <Webcam ref={webcamRef} className='webcam' />
         <button onClick={modeStop} className='secondary-btn'>
@@ -105,7 +118,10 @@ const StudyMode = () => {
 
   return (
     <StudyModeWrap>
-      <button onClick={modeStart}>Mode Start</button>
+      <span className='study-mode-title'>공부 모드</span>
+      <button onClick={modeStart} className='secondary-btn'>
+        Mode Start
+      </button>
     </StudyModeWrap>
   );
 };
@@ -137,5 +153,18 @@ const StudyModeWrap = styled.div`
     left: 0;
     width: 100%;
     height: 600px;
+  }
+
+  .study-mode-title {
+    float: left;
+    background-color: #d4d1ff;
+    margin-top: 10px;
+    margin-left: 10px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+
+  .secondary-btn {
+    bottom: 60rem;
   }
 `;

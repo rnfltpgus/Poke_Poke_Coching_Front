@@ -2,20 +2,20 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleButton } from 'react-google-button';
 import { useRecoilValue } from 'recoil';
-import userState from '../recoil/user';
+import { userState } from '../recoil/atom';
 import { signInWithGoogle } from '../auth/firebase';
 
 import styled from 'styled-components';
 
 const Login = () => {
   const navigate = useNavigate();
-  const name = useRecoilValue(userState);
+  const user = useRecoilValue(userState);
 
   useEffect(() => {
-    if (name.displayName) {
+    if (user.displayName) {
       navigate('/');
     }
-  }, [name.displayName]);
+  }, [user.displayName]);
 
   return (
     <LoginWrap>
