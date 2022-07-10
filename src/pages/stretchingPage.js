@@ -54,7 +54,7 @@ const StretchingWrap = styled.div`
 
   .stretching-mode-title {
     float: left;
-    background-color: #87ecfa;
+    background-color: #d4d1ff;
     margin-top: 10px;
     margin-left: 10px;
     padding: 0 10px;

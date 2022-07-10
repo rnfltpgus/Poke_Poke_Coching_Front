@@ -233,15 +233,19 @@ const CountDownTimerWrap = styled.div`
   }
 
   .increase-btn {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px 50% 50% 5px;
+    border: saddlebrown;
+    background-color: #f898ff;
   }
 
   .decrease-btn {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px 5px 50px 50%;
+    border: saddlebrown;
+    background-color: #ffafbd;
   }
 
   .pause-btn {

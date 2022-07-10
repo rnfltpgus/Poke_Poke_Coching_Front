@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import userState from '../recoil/user';
+import { userState } from '../recoil/atom';
 import { signOutGoogle, auth } from '../auth/firebase';
 
 import styled from 'styled-components';
 
 const Header = () => {
   const isLogins = useSetRecoilState(userState);
+  const user = useRecoilValue(userState);
   const navigate = useNavigate();
-  const name = useRecoilValue(userState);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -39,9 +39,9 @@ const Header = () => {
           <a href='/'>P.P.C.</a>
         </h1>
         <div>
-          {name.displayName ? (
+          {user.displayName ? (
             <>
-              <span className='user-name'>{name.displayName} 님</span>
+              <span className='user-name'>{user.displayName} 님</span>
               <span className='bar'>|</span>
               <span href='' className='logout' onClick={signOutGoogle}>
                 Sign out
