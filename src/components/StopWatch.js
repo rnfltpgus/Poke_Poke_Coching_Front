@@ -1,74 +1,51 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 
-class StopWatch extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      curTime: 0,
-      curTimeStr: '00:00:00.000',
-      isStarted: false,
-    };
+const StopWatch = () => {
+  const [time, setTime] = useState(0);
+  const [timerOn, setTimerOn] = useState(false);
 
-    this.toggleSwitch = this.toggleSwitch.bind(this);
-    this.resetTime = this.resetTime.bind(this);
-  }
+  useEffect(() => {
+    let interval = null;
 
-  toggleSwitch() {
-    if (!this.state.isStarted) {
-      this.setState({ isStarted: true }, () => {
-        this.startTick();
-      });
-    } else {
-      this.setState({ isStarted: false }, () => {
-        this.endTick();
-      });
+    if (timerOn) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
+    } else if (!timerOn) {
+      clearInterval(interval);
     }
-  }
 
-  resetTime() {
-    this.setState({
-      curTime: 0,
-      curTimeStr: '00:00:00.000',
-    });
-  }
+    return () => clearInterval(interval);
+  }, [timerOn]);
 
-  startTick() {
-    this.tick = setInterval(() => {
-      this.setState(
-        {
-          curTime: this.state.curTime + 1,
-        },
-        () => {
-          this.setState({
-            curTimeStr:
-              new Date(this.state.curTime).toISOString().substr(11, 8) +
-              '.' +
-              (this.state.curTime % 1000),
-          });
-        },
-      );
-    }, 1);
-  }
+  return (
+    <StopWatchWrap>
+      <div className='stopwatch-header'>Stopwatch</div>
+      <div className='stopwatch-display'>
+        <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+        <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+        <span>{('0' + ((time / 10) % 100)).slice(-2)}</span>
+      </div>
 
-  endTick() {
-    clearInterval(this.tick);
-  }
-
-  render() {
-    return (
-      <StopWatchWrap>
-        <div className='stopwatch-header'>Stop Watch</div>
-        <div>{this.state.curTimeStr}</div>
-        <button className='start-btn' onClick={this.toggleSwitch}>
-          {this.state.isStarted ? 'Stop' : 'Start'}
-        </button>
-        <button onClick={this.resetTime}>Reset</button>
-      </StopWatchWrap>
-    );
-  }
-}
+      <div className='stopwatch-buttons'>
+        {!timerOn && time === 0 && (
+          <button onClick={() => setTimerOn(true)}>Start</button>
+        )}
+        {timerOn && <button onClick={() => setTimerOn(false)}>Stop</button>}
+        {!timerOn && time > 0 && (
+          <button className='reset-btn' onClick={() => setTime(0)}>
+            Reset
+          </button>
+        )}
+        {!timerOn && time > 0 && (
+          <button onClick={() => setTimerOn(true)}>Resume</button>
+        )}
+      </div>
+    </StopWatchWrap>
+  );
+};
 
 export default StopWatch;
 
@@ -84,7 +61,7 @@ const StopWatchWrap = styled.div`
     border-radius: 10px;
   }
 
-  .start-btn {
+  .reset-btn {
     margin-right: 10px;
   }
 `;
