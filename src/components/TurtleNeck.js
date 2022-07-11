@@ -35,7 +35,6 @@ const TurtleNeck = () => {
     const poseNetLoad = await poseNet.load({
       scale: 0.5,
     });
-
     const countAudio = new Audio(very);
 
     setInterval(() => {

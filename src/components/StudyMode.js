@@ -17,8 +17,16 @@ const StudyMode = () => {
   const canvasRef = useRef(null);
   const navigate = useNavigate();
   const [isStartPose, setIsStartPose] = useState(false);
+  const [startingTime, setStartingTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [studyTime, setStudyTime] = useState(0);
   const condition = useSetRecoilState(conditionState);
   const resetCount = useResetRecoilState(conditionState);
+
+  useEffect(() => {
+    const timeDiff = (currentTime - startingTime) / 1000;
+    setStudyTime(timeDiff);
+  }, [currentTime, startingTime]);
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
@@ -28,6 +36,7 @@ const StudyMode = () => {
     const countAudio = new Audio(piano);
 
     interval = setInterval(() => {
+      checkTime();
       poseDetect(poseNetLoad, countAudio);
     }, 1000);
   };
@@ -52,8 +61,6 @@ const StudyMode = () => {
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = handsBehindNeckSignSwitchPage(pose);
       const poseKeyPoints = pose.keypoints;
-
-      console.log(keepPosture);
 
       for (let i = 0; i < poseKeyPoints.length; i++) {
         const right_Eye = poseKeyPoints[1].position;
@@ -149,6 +156,13 @@ const StudyMode = () => {
     }
   };
 
+  const checkTime = () => {
+    if (isStartPose === true) {
+      setStartingTime(new Date(Date()).getTime());
+    }
+    setCurrentTime(new Date(Date()).getTime());
+  };
+
   const modeStart = () => {
     setIsStartPose(true);
     runPoseNet();
@@ -163,6 +177,7 @@ const StudyMode = () => {
   if (isStartPose) {
     return (
       <StudyModeWrap>
+        <div className='count-down'>Count Down : {studyTime} s</div>
         <span className='study-mode-title'>공부 모드</span>
         <canvas ref={canvasRef} className='canvas' />
         <Webcam ref={webcamRef} className='webcam' />
