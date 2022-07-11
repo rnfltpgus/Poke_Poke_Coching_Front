@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
 import { useNavigate } from 'react-router-dom';
 import * as poseNet from '@tensorflow-models/posenet';
@@ -52,6 +52,8 @@ const StudyMode = () => {
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = handsBehindNeckSignSwitchPage(pose);
       const poseKeyPoints = pose.keypoints;
+
+      console.log(keepPosture);
 
       for (let i = 0; i < poseKeyPoints.length; i++) {
         const right_Eye = poseKeyPoints[1].position;
