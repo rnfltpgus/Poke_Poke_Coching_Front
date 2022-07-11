@@ -26,15 +26,15 @@ const StudyMode = () => {
     });
 
     const countAudio = new Audio(piano);
-    countAudio.loop = true;
 
     interval = setInterval(() => {
       poseDetect(poseNetLoad, countAudio);
-    }, 100);
+    }, 1000);
   };
 
   const default_Right_Eye_Position = [];
   const default_Left_Eye_Position = [];
+  const keepPosture = [];
   let warnings = 0;
 
   const poseDetect = async (poseNetLoad, countAudio) => {
@@ -50,10 +50,8 @@ const StudyMode = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const correctPosture = circleSign(pose);
+      const correctPosture = handsBehindNeckSignSwitchPage(pose);
       const poseKeyPoints = pose.keypoints;
-
-      console.log(correctPosture);
 
       for (let i = 0; i < poseKeyPoints.length; i++) {
         const right_Eye = poseKeyPoints[1].position;
@@ -80,12 +78,14 @@ const StudyMode = () => {
           countAudio.pause();
         }
       }
-
       if (correctPosture) {
-        countAudio.pause();
-        navigate('/stretchingpage');
+        if (keepPosture.length === 3) {
+          countAudio.pause();
+          navigate('/stretchingpage');
+        }
       }
-      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
+
+      // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   };
 
@@ -124,8 +124,7 @@ const StudyMode = () => {
     }
   };
 
-  const circleSign = (pose) => {
-    const head = pose.keypoints[0].position;
+  const handsBehindNeckSignSwitchPage = (pose) => {
     const left_Elbow = pose.keypoints[7].position;
     const right_Elbow = pose.keypoints[8].position;
     const left_Wrist = pose.keypoints[9].position;
@@ -136,9 +135,12 @@ const StudyMode = () => {
         (right_Elbow.x < right_Wrist.x && right_Wrist.y > right_Elbow.y) ||
         (right_Elbow.x > right_Wrist.x && left_Elbow.y < left_Wrist.y)
       ) {
-        console.log('🔥 지금 여기 들어오고 있니?');
+        keepPosture.push(true);
+
         return true;
       }
+      keepPosture.pop();
+
       return false;
     } else {
       return false;
@@ -215,8 +217,5 @@ const StudyModeWrap = styled.div`
     margin-left: 10px;
     padding: 0 10px;
     border-radius: 10px;
-  }
-
-  .secondary-btn {
   }
 `;

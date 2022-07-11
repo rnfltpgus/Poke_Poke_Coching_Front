@@ -19,7 +19,7 @@ export default CheckWrongPosture;
 
 const CheckWrongPostureWrap = styled.div`
   width: 95%;
-  margin: 20px auto 10px auto;
+  margin: 30px auto 10px auto;
   gap: 2rem;
 
   .CheckWrongPosture-header {
