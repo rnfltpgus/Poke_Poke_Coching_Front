@@ -74,7 +74,7 @@ export default StopWatch;
 
 const StopWatchWrap = styled.div`
   width: 95%;
-  margin: 20px auto 10px auto;
+  margin: 30px auto 10px auto;
   gap: 2rem;
 
   .stopwatch-header {

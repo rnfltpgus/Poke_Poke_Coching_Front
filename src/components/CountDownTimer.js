@@ -131,13 +131,12 @@ class CountDownTimer extends Component {
         <div className='countdown-header'>Countdown Timer</div>
         <div className='countdown-display'>
           <div className='countdown-item'>
-            <div className='countdown-label'>Hour</div>
             <div>
               <button
                 className='increase-btn'
                 onClick={() => this.handleSetTimer('incHours')}></button>
             </div>
-            <div className='countdown-time'>{hours}</div>
+            <div className='countdown-time'>{hours} 시</div>
             <div>
               <button
                 className='decrease-btn'
@@ -145,13 +144,12 @@ class CountDownTimer extends Component {
             </div>
           </div>
           <div className='countdown-item'>
-            <div className='countdown-label'>Min</div>
             <div>
               <button
                 className='increase-btn'
                 onClick={() => this.handleSetTimer('incMinutes')}></button>
             </div>
-            <div className='countdown-time'>{minutes}</div>
+            <div className='countdown-time'>{minutes} 분</div>
             <div>
               <button
                 className='decrease-btn'
@@ -159,13 +157,12 @@ class CountDownTimer extends Component {
             </div>
           </div>
           <div className='countdown-item'>
-            <div className='countdown-label'>Sec</div>
             <div>
               <button
                 className='increase-btn'
                 onClick={() => this.handleSetTimer('incSeconds')}></button>
             </div>
-            <div className='countdown-time'>{seconds}</div>
+            <div className='countdown-time'>{seconds} 초</div>
             <div>
               <button
                 className='decrease-btn'
@@ -214,7 +211,7 @@ export default CountDownTimer;
 
 const CountDownTimerWrap = styled.div`
   width: 95%;
-  margin: 20px auto 10px auto;
+  margin: 30px auto 10px auto;
   gap: 2rem;
 
   .countdown-header {

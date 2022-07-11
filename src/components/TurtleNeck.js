@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
+import { useNavigate } from 'react-router-dom';
 import * as poseNet from '@tensorflow-models/posenet';
 
 import { very } from '../util/music/index';
@@ -10,6 +11,7 @@ let flag = false;
 
 const TurtleNeck = () => {
   const webcamRef = useRef(null);
+  const navigate = useNavigate();
   const [startingTime, setStartingTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [poseTime, setPoseTime] = useState(0);
@@ -31,16 +33,17 @@ const TurtleNeck = () => {
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
-      scale: 0.3,
+      scale: 0.5,
     });
 
     const countAudio = new Audio(very);
-    countAudio.loop = true;
 
     setInterval(() => {
       poseDetect(poseNetLoad, countAudio);
     }, 1000);
   };
+
+  const keepPosture = [];
 
   const poseDetect = async (poseNetLoad, countAudio) => {
     if (
@@ -56,19 +59,29 @@ const TurtleNeck = () => {
 
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = checkWristUpDown(pose);
+      const studyModeSwitchPage = SwitchPage(pose);
 
-      if (correctPosture === true) {
-        if (pose.score > 0.63) {
-          if (!flag) {
-            countAudio.play();
-            setStartingTime(new Date(Date()).getTime());
-            flag = true;
-          }
-          setCurrentTime(new Date(Date()).getTime());
-        } else {
-          flag = false;
+      if (flag === null) {
+        return;
+      }
+
+      if (correctPosture === true && pose.score > 0.65) {
+        if (!flag) {
+          countAudio.play();
+          setStartingTime(new Date(Date()).getTime());
+          flag = true;
+        }
+        setCurrentTime(new Date(Date()).getTime());
+      } else {
+        flag = false;
+        countAudio.pause();
+        setCurrentTime(0);
+      }
+
+      if (studyModeSwitchPage) {
+        if (keepPosture.length === 3) {
           countAudio.pause();
-          setCurrentTime(0);
+          navigate('/studypage');
         }
       }
     }
@@ -95,8 +108,43 @@ const TurtleNeck = () => {
         shoulder > right_Shoulder.x - right_Elbow.x &&
         shoulder > left_Elbow.x - left_Shoulder.x
       ) {
+        if (
+          left_Wrist.x > left_Shoulder.x ||
+          right_Shoulder.x < right_Wrist.x
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
+  const SwitchPage = (pose) => {
+    const head = pose.keypoints[0].position;
+    const left_Elbow = pose.keypoints[7].position;
+    const right_Elbow = pose.keypoints[8].position;
+    const left_Wrist = pose.keypoints[9].position;
+    const right_Wrist = pose.keypoints[10].position;
+
+    if (
+      head.y < right_Wrist.y < right_Elbow.y &&
+      head.y < left_Wrist.y < left_Elbow.y
+    ) {
+      if (
+        (right_Wrist.y && left_Wrist.y) < head.y &&
+        (left_Elbow.y && right_Elbow.y) > head.y
+      ) {
+        keepPosture.push(true);
+
         return true;
       } else {
+        keepPosture.pop();
+
         return false;
       }
     } else {
