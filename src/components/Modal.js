@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-// import CloseButton from './CloseButton';
 import Portal from './potal';
 
 function Modal({
@@ -42,7 +41,11 @@ function Modal({
         tabIndex={-1}
         visible={visible}>
         <ModalInner tabIndex={0} className='modal-inner'>
-          {closable && <button className='modal-close' onClick={close} />}
+          {closable && (
+            <button className='modal-close' onClick={close}>
+              x
+            </button>
+          )}
           {children}
         </ModalInner>
       </ModalWrapper>

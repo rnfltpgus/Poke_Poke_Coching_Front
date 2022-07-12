@@ -12,7 +12,6 @@ const CheckWrongPosture = () => {
     <CheckWrongPostureWrap>
       <div className='CheckWrongPosture-header'>CheckWrongPosture</div>
       <div>{currentCondition.warnings} 회</div>
-      <button></button>
     </CheckWrongPostureWrap>
   );
 };
