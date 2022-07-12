@@ -1,16 +1,18 @@
-import { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { userState } from '../recoil/atom';
 import { signOutGoogle, auth } from '../auth/firebase';
 
 import styled from 'styled-components';
+import GuideLines from './GuideLines';
+import Modal from './Modal';
 
 const Header = () => {
   const isLogins = useSetRecoilState(userState);
   const user = useRecoilValue(userState);
-  const navigate = useNavigate();
+  const [modalOn, setModalOn] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -28,8 +30,12 @@ const Header = () => {
     });
   }, []);
 
-  const handleNavigateMyPage = () => {
-    navigate('/mypage');
+  const openModal = () => {
+    setModalOn(true);
+  };
+
+  const closeModal = () => {
+    setModalOn(false);
   };
 
   return (
@@ -46,9 +52,18 @@ const Header = () => {
               <span href='' className='logout' onClick={signOutGoogle}>
                 Sign out
               </span>
-              <button className='my-page' onClick={handleNavigateMyPage}>
-                MyPage
+              <button className='guide-lines' onClick={openModal}>
+                Guide Lines
               </button>
+              {modalOn && (
+                <Modal
+                  visible={modalOn}
+                  closable={true}
+                  backGroundClosable={true}
+                  onClose={closeModal}>
+                  <GuideLines />
+                </Modal>
+              )}
             </>
           ) : (
             <Link to='/login'>
@@ -102,7 +117,7 @@ const HeaderWrap = styled.div`
       color: #4785f0;
     }
 
-    .my-page {
+    .guide-lines {
       margin-left: 25px;
       margin-right: 25px;
       border-radius: 10px;

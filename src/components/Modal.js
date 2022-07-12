@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import Portal from './Potal';
+import Portal from './Portal';
 
 function Modal({
   className,
-  onClose,
-  maskClosable,
-  closable,
   visible,
+  closable,
+  backGroundClosable,
+  onClose,
   children,
 }) {
   const onMaskClick = (e) => {
@@ -22,21 +22,12 @@ function Modal({
     }
   };
 
-  useEffect(() => {
-    document.body.style.cssText = `position: fixed; top: -${window.scrollY}px`;
-    return () => {
-      const scrollY = document.body.style.top;
-      document.body.style.cssText = `position: ""; top: "";`;
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
-    };
-  }, []);
-
   return (
     <Portal elementId='modal'>
       <ModalOverlay visible={visible} />
       <ModalWrapper
         className={className}
-        onClick={maskClosable ? onMaskClick : null}
+        onClick={backGroundClosable ? onMaskClick : null}
         tabIndex={-1}
         visible={visible}>
         <ModalInner tabIndex={0} className='modal-inner'>
@@ -54,7 +45,6 @@ function Modal({
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
   position: fixed;
   top: 0;
   right: 0;
@@ -67,7 +57,6 @@ const ModalWrapper = styled.div`
 
 const ModalOverlay = styled.div`
   box-sizing: border-box;
-  display: ${(props) => (props.visible ? 'block' : 'none')};
   position: fixed;
   top: 0;
   left: 0;
@@ -83,12 +72,13 @@ const ModalInner = styled.div`
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 10px;
-  width: 360px;
+  width: 500px;
+  height: 300px;
   max-width: 480px;
   top: 50%;
   transform: translateY(-50%);
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 20px 20px;
 `;
 
 export default Modal;
