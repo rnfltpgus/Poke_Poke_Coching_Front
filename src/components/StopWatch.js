@@ -13,7 +13,7 @@ const StopWatch = () => {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
-    } else if (!timerOn) {
+    } else {
       clearInterval(interval);
     }
 

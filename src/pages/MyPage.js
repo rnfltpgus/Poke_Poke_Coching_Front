@@ -9,6 +9,7 @@ const MyPage = () => {
   const closeModal = () => {
     setModalOn(false);
   };
+
   return (
     <div>
       MyPage

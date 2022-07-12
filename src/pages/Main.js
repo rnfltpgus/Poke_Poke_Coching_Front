@@ -42,6 +42,13 @@ const SelectMode = styled.div`
     height: 700px;
     box-sizing: border-box;
     font-weight: bold;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    transform: translateY(0);
+  }
+
+  div:hover {
+    transform: translateY(-10px);
   }
 
   & span {
