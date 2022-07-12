@@ -11,8 +11,9 @@ const userState = atom({
 const conditionState = atom({
   key: 'condition',
   default: {
-    runtime: '0',
-    warnings: '0',
+    runtime: 0,
+    warnings: 0,
+    studyModeOn: false,
   },
 });
 

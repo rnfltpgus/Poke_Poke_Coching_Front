@@ -11,6 +11,7 @@ const RealTimeClock = () => {
   const [hour, setHour] = useState(padNumber(now.getHours(), 2));
   const [min, setMin] = useState(padNumber(now.getMinutes(), 2));
   const [sec, setSec] = useState(padNumber(now.getSeconds(), 2));
+  const [time, setTime] = useState(0);
   const currentCondition = useRecoilValue(conditionState);
   const interval = useRef(null);
 
@@ -25,22 +26,19 @@ const RealTimeClock = () => {
     return () => clearInterval(interval.current);
   }, []);
 
-  const [time, setTime] = useState(0);
-  const [timerOn, setTimerOn] = useState(false);
-
   useEffect(() => {
     let interval = null;
 
-    if (timerOn) {
+    if (currentCondition.studyModeOn) {
       interval = setInterval(() => {
         setTime((prevTime) => prevTime + 10);
       }, 10);
-    } else if (!timerOn) {
+    } else if (!currentCondition.studyModeOn) {
       clearInterval(interval);
     }
 
     return () => clearInterval(interval);
-  }, [timerOn]);
+  }, [currentCondition.studyModeOn]);
 
   return (
     <RealTimeClockWrap>
@@ -51,27 +49,12 @@ const RealTimeClock = () => {
         </div>
       </div>
       <div>
-        <div className='realtime-header'>Real Study Time</div>
-        {/* <div className='realtime'>{currentCondition.runtime}</div> */}
+        <div className='realtime-study-header'>Real Study Time</div>
+        <div className='realtime'>{currentCondition.studyModeOn}</div>
         <div className='stopwatch-display'>
-          <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-          <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-          <span>{('0' + ((time / 10) % 100)).slice(-2)}</span>
-        </div>
-
-        <div className='stopwatch-buttons'>
-          {!timerOn && time === 0 && (
-            <button onClick={() => setTimerOn(true)}>Start</button>
-          )}
-          {timerOn && <button onClick={() => setTimerOn(false)}>Stop</button>}
-          {!timerOn && time > 0 && (
-            <button className='reset-btn' onClick={() => setTime(0)}>
-              Reset
-            </button>
-          )}
-          {!timerOn && time > 0 && (
-            <button onClick={() => setTimerOn(true)}>Resume</button>
-          )}
+          <span>{('0' + Math.floor((time / 3600000) % 60)).slice(-2)}시 </span>
+          <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}분 </span>
+          <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}초 </span>
         </div>
       </div>
     </RealTimeClockWrap>
@@ -87,6 +70,13 @@ const RealTimeClockWrap = styled.div`
 
   .realtime-header {
     background-color: #948df9;
+    margin: 10px 30px;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+
+  .realtime-study-header {
+    background-color: #b568f3;
     margin: 10px 30px;
     padding: 0 10px;
     border-radius: 10px;
