@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import { useNavigate } from 'react-router-dom';
 import * as poseNet from '@tensorflow-models/posenet';
-import { useSetRecoilState, useResetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { conditionState } from '../recoil/atom';
 import { drawKeyPoints, drawSkeleton } from '../util/tensorflow/utils';
-import { piano } from '../util/music/index';
+import { loud } from '../util/music/index';
 
 import styled from 'styled-components';
 
@@ -17,28 +17,16 @@ const StudyMode = () => {
   const canvasRef = useRef(null);
   const navigate = useNavigate();
   const [isStartPose, setIsStartPose] = useState(false);
-  const [startingTime, setStartingTime] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [studyTime, setStudyTime] = useState(0);
-  const [waringCount, setWaringCount] = useState(0);
   const condition = useSetRecoilState(conditionState);
-  const resetCount = useResetRecoilState(conditionState);
-
-  useEffect(() => {
-    const timeDiff = (currentTime - startingTime) / 1000;
-
-    setStudyTime(timeDiff);
-    condition({ runtime: studyTime, warnings: waringCount });
-  }, [condition, currentTime, startingTime, studyTime, waringCount]);
+  const conditionCheck = useRecoilValue(conditionState);
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
       scale: 0.8,
     });
-    const countAudio = new Audio(piano);
+    const countAudio = new Audio(loud);
 
     interval = setInterval(() => {
-      checkTime();
       poseDetect(poseNetLoad, countAudio);
     }, 100);
   };
@@ -46,7 +34,8 @@ const StudyMode = () => {
   const default_Right_Eye_Position = [];
   const default_Left_Eye_Position = [];
   const keepPosture = [];
-  let warnings = 0;
+  let warnings = conditionCheck.warnings;
+  let waringCount;
 
   const poseDetect = async (poseNetLoad, countAudio) => {
     if (
@@ -64,9 +53,6 @@ const StudyMode = () => {
       const correctPosture = handsBehindNeckSignSwitchPage(pose);
       const poseKeyPoints = pose.keypoints;
 
-      // console.log('🧨 correctPosture', correctPosture);
-      // console.log('🔥 pose.score', pose.score);
-
       for (let i = 0; i < poseKeyPoints.length; i++) {
         const right_Eye = poseKeyPoints[1].position;
         const left_Eye = poseKeyPoints[2].position;
@@ -79,19 +65,24 @@ const StudyMode = () => {
         right_InitialValues && default_Right_Eye_Position.push(right_Eye.y);
         left_InitialValues && default_Left_Eye_Position.push(left_Eye.y);
 
-        if (coordinateDifference > 20) {
-          countAudio.play();
+        if (coordinateDifference > 30) {
+          waringCount = Math.floor(warnings / 150);
           warnings = warnings + 1;
-          setWaringCount(Math.floor(warnings / 200));
+          countAudio.play();
+          condition({ warnings: waringCount, studyModeOn: false });
+        } else {
+          condition({ warnings: waringCount, studyModeOn: true });
         }
 
-        if (Math.ceil(coordinateDifference <= 20)) {
+        if (Math.ceil(coordinateDifference <= 30)) {
           countAudio.pause();
         }
       }
+
       if (correctPosture) {
-        if (keepPosture.length === 30) {
+        if (keepPosture.length === 20) {
           countAudio.pause();
+          condition({ studyModeOn: false });
           navigate('/stretchingpage');
         }
       }
@@ -158,21 +149,15 @@ const StudyMode = () => {
     }
   };
 
-  const checkTime = () => {
-    if (isStartPose === true) {
-      setStartingTime(new Date(Date()).getTime());
-    }
-    setCurrentTime(new Date(Date()).getTime());
-  };
-
   const modeStart = () => {
     setIsStartPose(true);
+    condition({ warnings: conditionCheck.warnings, studyModeOn: true });
     runPoseNet();
   };
 
   const modeStop = () => {
     setIsStartPose(false);
-    resetCount();
+    condition({ warnings: conditionCheck.warnings, studyModeOn: false });
     clearInterval(interval);
   };
 

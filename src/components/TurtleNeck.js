@@ -60,8 +60,6 @@ const TurtleNeck = () => {
       const correctPosture = checkWristUpDown(pose);
       const studyModeSwitchPage = SwitchPage(pose);
 
-      console.log(keepPosture);
-
       if (flag === null) {
         return;
       }
