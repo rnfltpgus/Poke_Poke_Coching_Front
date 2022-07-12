@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Portal from './potal';
+import Portal from './Potal';
 
 function Modal({
   className,
@@ -33,7 +32,7 @@ function Modal({
   }, []);
 
   return (
-    <Portal elementId='modal-root'>
+    <Portal elementId='modal'>
       <ModalOverlay visible={visible} />
       <ModalWrapper
         className={className}

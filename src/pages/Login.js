@@ -22,7 +22,7 @@ const Login = () => {
       <div className='login-image-container'>
         <img src='/img/Logo.png' />
       </div>
-      <GoogleButton onClick={signInWithGoogle} />
+      <GoogleButton onClick={signInWithGoogle} className='google-btn' />
       <div className='login-footer'>
         <span>© 2022 Reserved by Seny</span>
       </div>
@@ -45,5 +45,15 @@ const LoginWrap = styled.div`
     position: absolute;
     bottom: 5vh;
     align-items: center;
+  }
+
+  .google-btn {
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    transform: translateY(0);
+  }
+
+  .google-btn:hover {
+    transform: translateY(-5px);
   }
 `;

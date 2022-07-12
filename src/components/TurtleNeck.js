@@ -29,11 +29,11 @@ const TurtleNeck = () => {
     if ((currentTime - startingTime) / 1000 > bestPerform) {
       setBestPerform(timeDiff);
     }
-  }, [currentTime, startingTime]);
+  }, [bestPerform, currentTime, startingTime]);
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
-      scale: 0.5,
+      scale: 0.8,
     });
     const countAudio = new Audio(very);
 

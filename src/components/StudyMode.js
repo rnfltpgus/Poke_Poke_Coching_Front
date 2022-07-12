@@ -101,7 +101,7 @@ const StudyMode = () => {
     drawSkeleton(pose.keypoints, minPartConfidence, context);
   };
 
-  const checkFutureHandsUp = (pose) => {
+  const checkPutYourHandsUp = (pose) => {
     const head = pose.keypoints[0].position;
     const left_Shoulder = pose.keypoints[5].position;
     const right_Shoulder = pose.keypoints[6].position;
@@ -132,7 +132,7 @@ const StudyMode = () => {
     const left_Wrist = pose.keypoints[9].position;
     const right_Wrist = pose.keypoints[10].position;
 
-    if (checkFutureHandsUp(pose)) {
+    if (checkPutYourHandsUp(pose)) {
       if (
         (right_Elbow.x < right_Wrist.x && right_Wrist.y > right_Elbow.y) ||
         (right_Elbow.x > right_Wrist.x && left_Elbow.y < left_Wrist.y)
