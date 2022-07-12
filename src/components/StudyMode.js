@@ -20,25 +20,27 @@ const StudyMode = () => {
   const [startingTime, setStartingTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [studyTime, setStudyTime] = useState(0);
+  const [waringCount, setWaringCount] = useState(0);
   const condition = useSetRecoilState(conditionState);
   const resetCount = useResetRecoilState(conditionState);
 
   useEffect(() => {
     const timeDiff = (currentTime - startingTime) / 1000;
+
     setStudyTime(timeDiff);
-  }, [currentTime, startingTime]);
+    condition({ runtime: studyTime, warnings: waringCount });
+  }, [condition, currentTime, startingTime, studyTime, waringCount]);
 
   const runPoseNet = async () => {
     const poseNetLoad = await poseNet.load({
       scale: 0.8,
     });
-
     const countAudio = new Audio(piano);
 
     interval = setInterval(() => {
       checkTime();
       poseDetect(poseNetLoad, countAudio);
-    }, 1000);
+    }, 100);
   };
 
   const default_Right_Eye_Position = [];
@@ -62,6 +64,9 @@ const StudyMode = () => {
       const correctPosture = handsBehindNeckSignSwitchPage(pose);
       const poseKeyPoints = pose.keypoints;
 
+      // console.log('🧨 correctPosture', correctPosture);
+      // console.log('🔥 pose.score', pose.score);
+
       for (let i = 0; i < poseKeyPoints.length; i++) {
         const right_Eye = poseKeyPoints[1].position;
         const left_Eye = poseKeyPoints[2].position;
@@ -75,12 +80,9 @@ const StudyMode = () => {
         left_InitialValues && default_Left_Eye_Position.push(left_Eye.y);
 
         if (coordinateDifference > 20) {
-          const waringCount = Math.floor(warnings / 100);
-
           countAudio.play();
           warnings = warnings + 1;
-
-          condition({ warnings: waringCount });
+          setWaringCount(Math.floor(warnings / 200));
         }
 
         if (Math.ceil(coordinateDifference <= 20)) {
@@ -88,7 +90,7 @@ const StudyMode = () => {
         }
       }
       if (correctPosture) {
-        if (keepPosture.length === 3) {
+        if (keepPosture.length === 30) {
           countAudio.pause();
           navigate('/stretchingpage');
         }
@@ -177,7 +179,6 @@ const StudyMode = () => {
   if (isStartPose) {
     return (
       <StudyModeWrap>
-        <div className='count-down'>Count Down : {studyTime} s</div>
         <span className='study-mode-title'>공부 모드</span>
         <canvas ref={canvasRef} className='canvas' />
         <Webcam ref={webcamRef} className='webcam' />

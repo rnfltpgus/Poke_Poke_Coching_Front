@@ -11,7 +11,7 @@ const userState = atom({
 const conditionState = atom({
   key: 'condition',
   default: {
-    runtime: '',
+    runtime: '0',
     warnings: '0',
   },
 });

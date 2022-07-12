@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 
+import { conditionState } from '../recoil/atom';
 import padNumber from '../util/helpers/padNumber';
 
 import styled from 'styled-components';
@@ -9,6 +11,7 @@ const RealTimeClock = () => {
   const [hour, setHour] = useState(padNumber(now.getHours(), 2));
   const [min, setMin] = useState(padNumber(now.getMinutes(), 2));
   const [sec, setSec] = useState(padNumber(now.getSeconds(), 2));
+  const currentCondition = useRecoilValue(conditionState);
   const interval = useRef(null);
 
   useEffect(() => {
@@ -22,11 +25,54 @@ const RealTimeClock = () => {
     return () => clearInterval(interval.current);
   }, []);
 
+  const [time, setTime] = useState(0);
+  const [timerOn, setTimerOn] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+
+    if (timerOn) {
+      interval = setInterval(() => {
+        setTime((prevTime) => prevTime + 10);
+      }, 10);
+    } else if (!timerOn) {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [timerOn]);
+
   return (
     <RealTimeClockWrap>
-      <div className='realtime-header'>Real Time</div>
-      <div className='realtime'>
-        {hour}시 {min}분 {sec}초
+      <div>
+        <div className='realtime-header'>Real Time</div>
+        <div className='realtime'>
+          {hour}시 {min}분 {sec}초
+        </div>
+      </div>
+      <div>
+        <div className='realtime-header'>Real Study Time</div>
+        {/* <div className='realtime'>{currentCondition.runtime}</div> */}
+        <div className='stopwatch-display'>
+          <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+          <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+          <span>{('0' + ((time / 10) % 100)).slice(-2)}</span>
+        </div>
+
+        <div className='stopwatch-buttons'>
+          {!timerOn && time === 0 && (
+            <button onClick={() => setTimerOn(true)}>Start</button>
+          )}
+          {timerOn && <button onClick={() => setTimerOn(false)}>Stop</button>}
+          {!timerOn && time > 0 && (
+            <button className='reset-btn' onClick={() => setTime(0)}>
+              Reset
+            </button>
+          )}
+          {!timerOn && time > 0 && (
+            <button onClick={() => setTimerOn(true)}>Resume</button>
+          )}
+        </div>
       </div>
     </RealTimeClockWrap>
   );
@@ -35,9 +81,9 @@ const RealTimeClock = () => {
 export default RealTimeClock;
 
 const RealTimeClockWrap = styled.div`
+  display: flex;
   width: 95%;
   margin: 45px auto 10px auto;
-  gap: 2rem;
 
   .realtime-header {
     background-color: #948df9;
