@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 let flag = false;
 
-const ArmStretching = () => {
+const SideNeckStretching = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [startingTime, setStartingTime] = useState(0);
@@ -56,13 +56,13 @@ const ArmStretching = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const correctPosture = checkArmStretching(pose);
+      const correctPosture = checkSideNeckStretching(pose);
 
       if (flag === null) {
         return;
       }
 
-      if (correctPosture === true && pose.score > 0.66) {
+      if (correctPosture === true && pose.score > 0.55) {
         if (!flag) {
           countAudio.play();
           setStartingTime(new Date(Date()).getTime());
@@ -88,7 +88,10 @@ const ArmStretching = () => {
     drawSkeleton(pose.keypoints, minPartConfidence, context);
   };
 
-  const checkArmStretching = (pose) => {
+  const checkSideNeckStretching = (pose) => {
+    const head = pose.keypoints[0].position;
+    const left_Eye = pose.keypoints[1].position;
+    const right_Eye = pose.keypoints[2].position;
     const left_Shoulder = pose.keypoints[5].position;
     const right_Shoulder = pose.keypoints[6].position;
     const left_Elbow = pose.keypoints[7].position;
@@ -96,48 +99,35 @@ const ArmStretching = () => {
     const left_Wrist = pose.keypoints[9].position;
     const right_Wrist = pose.keypoints[10].position;
 
-    if (right_Shoulder.x > left_Wrist.x || left_Shoulder.x < right_Wrist.x) {
-      const shoulderLength = left_Shoulder.x - right_Shoulder.x;
-
-      if (
-        shoulderLength > right_Shoulder.x - left_Elbow.x &&
-        shoulderLength > right_Elbow.x - left_Shoulder.x
-      ) {
-        if (
-          (right_Shoulder.y > right_Wrist.y &&
-            right_Wrist.y < left_Elbow.y &&
-            left_Elbow.y > right_Elbow.y &&
-            right_Wrist.y) ||
-          (left_Shoulder.y > left_Wrist.y &&
-            left_Wrist.y < right_Elbow.y &&
-            right_Elbow.y > left_Elbow.y &&
-            left_Wrist.y)
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
+    if (
+      (right_Eye.x < left_Wrist.x &&
+        right_Elbow.y > right_Shoulder.y &&
+        right_Elbow.y > head.y &&
+        head.y > left_Wrist.y) ||
+      (left_Eye.x > right_Wrist.x &&
+        left_Elbow.y > left_Shoulder.y &&
+        left_Elbow.y > head.y &&
+        head.y > right_Wrist.y)
+    ) {
+      return true;
     } else {
       return false;
     }
   };
 
   return (
-    <ArmStretchingWrap>
+    <SideNeckStretchingWrap>
       <div className='count-down'>Count Down : {poseTime} s</div>
       <div className='maintain-time'>Maintain Time : {bestPerform} s</div>
       <canvas ref={canvasRef} className='canvas' />
       <Webcam ref={webcamRef} className='webcam' />
-    </ArmStretchingWrap>
+    </SideNeckStretchingWrap>
   );
 };
 
-export default ArmStretching;
+export default SideNeckStretching;
 
-const ArmStretchingWrap = styled.div`
+const SideNeckStretchingWrap = styled.div`
   position: relative;
   margin-left: auto;
   margin-right: auto;
