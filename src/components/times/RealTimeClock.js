@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { conditionState } from '../recoil/atom';
-import padNumber from '../util/helpers/padNumber';
+import { conditionState } from '../../recoil/atom';
+import padNumber from '../../util/helpers/padNumber';
 
 import styled from 'styled-components';
 

@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import * as poseNet from '@tensorflow-models/posenet';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
-import { conditionState } from '../recoil/atom';
-import { drawKeyPoints, drawSkeleton } from '../util/tensorflow/utils';
-import { loud } from '../util/music/index';
+import { conditionState } from '../../recoil/atom';
+import { drawKeyPoints, drawSkeleton } from '../../util/tensorflow/utils';
+import { loud } from '../../util/music/index';
 
 import styled from 'styled-components';
 

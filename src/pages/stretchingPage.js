@@ -1,7 +1,8 @@
 import React from 'react';
 
-import TurtleNeck from '../components/TurtleNeck';
-import TextCard from '../components/TextCard';
+import TurtleNeck from '../components/stretching/TurtleNeck';
+import PullArms from '../components/stretching/PullArms';
+import TextCard from '../components/stretching/TextCard';
 
 import styled from 'styled-components';
 
@@ -14,6 +15,7 @@ const StretchingPage = () => {
         </div>
         <div className='stretching-mode'>
           <TurtleNeck />
+          <PullArms />
         </div>
       </div>
       <TextCard />

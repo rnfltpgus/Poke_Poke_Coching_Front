@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { conditionState } from '../recoil/atom';
-import Modal from './Modal';
+import { conditionState } from '../../recoil/atom';
+import Modal from '../modal/Modal';
 import StudyWarningNotice from './StudyWarningNotice';
 
 import styled from 'styled-components';

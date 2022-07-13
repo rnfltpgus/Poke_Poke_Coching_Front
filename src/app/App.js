@@ -18,7 +18,7 @@ const App = () => {
     if (!isLoggedIn) {
       navigator('/login');
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, navigator]);
 
   return (
     <>

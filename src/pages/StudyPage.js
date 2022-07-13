@@ -1,10 +1,10 @@
 import React from 'react';
 
-import StudyMode from '../components/StudyMode';
-import RealTimeClock from '../components/RealTimeClock';
-import CountDownTimer from '../components/CountDownTimer';
-import StopWatch from '../components/StopWatch';
-import CheckWrongPosture from '../components/CheckWrongPosture';
+import StudyMode from '../components/study/StudyMode';
+import RealTimeClock from '../components/times/RealTimeClock';
+import CountDownTimer from '../components/times/CountDownTimer';
+import StopWatch from '../components/times/StopWatch';
+import CheckWrongPosture from '../components/study/CheckWrongPosture';
 
 import styled from 'styled-components';
 
