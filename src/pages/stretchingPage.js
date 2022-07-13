@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TurtleNeck from '../components/stretching/TurtleNeck';
-import PullArms from '../components/stretching/PullArms';
+import TurtleNeckStretching from '../components/stretching/TurtleNeckStretching';
+import ArmStretching from '../components/stretching/ArmStretching';
 import TextCard from '../components/stretching/TextCard';
 
 import styled from 'styled-components';
@@ -14,8 +14,8 @@ const StretchingPage = () => {
           <span className='stretching-mode-title'>거북목 교정 스트레칭</span>
         </div>
         <div className='stretching-mode'>
-          <TurtleNeck />
-          <PullArms />
+          <TurtleNeckStretching />
+          <ArmStretching />
         </div>
       </div>
       <TextCard />

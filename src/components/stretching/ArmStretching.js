@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Webcam from 'react-webcam';
-import { useNavigate } from 'react-router-dom';
 import * as poseNet from '@tensorflow-models/posenet';
 
+import { drawKeyPoints, drawSkeleton } from '../../util/tensorflow/utils';
 import { very } from '../../util/music/index';
 
 import styled from 'styled-components';
 
 let flag = false;
 
-const TurtleNeck = () => {
+const ArmStretching = () => {
   const webcamRef = useRef(null);
-  const navigate = useNavigate();
+  const canvasRef = useRef(null);
   const [startingTime, setStartingTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [poseTime, setPoseTime] = useState(0);
@@ -40,10 +40,8 @@ const TurtleNeck = () => {
 
     setInterval(() => {
       poseDetect(poseNetLoad, countAudio);
-    }, 1000);
+    }, 100);
   };
-
-  const keepPosture = [];
 
   const poseDetect = async (poseNetLoad, countAudio) => {
     if (
@@ -58,14 +56,13 @@ const TurtleNeck = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const correctPosture = checkWristUpDown(pose);
-      const studyModeSwitchPage = SwitchPage(pose);
+      const correctPosture = ArmStretching(pose);
 
       if (flag === null) {
         return;
       }
 
-      if (correctPosture === true && pose.score > 0.65) {
+      if (correctPosture === true && pose.score > 0.55) {
         if (!flag) {
           countAudio.play();
           setStartingTime(new Date(Date()).getTime());
@@ -77,18 +74,26 @@ const TurtleNeck = () => {
         countAudio.pause();
         setCurrentTime(0);
       }
-
-      if (studyModeSwitchPage) {
-        if (keepPosture.length === 3) {
-          countAudio.pause();
-          navigate('/studypage');
-        }
-      }
+      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
   };
 
-  const checkWristUpDown = (pose) => {
+  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+    const minPartConfidence = 0.8;
+    const context = canvas.current.getContext('2d');
+    canvas.current.width = videoWidth;
+    canvas.current.height = videoHeight;
+
+    drawKeyPoints(pose.keypoints, minPartConfidence, context);
+    drawSkeleton(pose.keypoints, minPartConfidence, context);
+  };
+
+  const ArmStretching = (pose) => {
     const head = pose.keypoints[0].position;
+    const left_Eye = pose.keypoints[1].position;
+    const right_Eye = pose.keypoints[2].position;
+    const left_leftEar = pose.keypoints[3].position;
+    const right_left = pose.keypoints[4].position;
     const left_Shoulder = pose.keypoints[5].position;
     const right_Shoulder = pose.keypoints[6].position;
     const left_Elbow = pose.keypoints[7].position;
@@ -97,20 +102,19 @@ const TurtleNeck = () => {
     const right_Wrist = pose.keypoints[10].position;
 
     if (
-      right_Wrist.y > right_Shoulder.y &&
-      left_Wrist.y > left_Shoulder.y &&
-      right_Elbow.x < head.x &&
-      head.x < left_Elbow.x
+      right_Shoulder.x > left_Wrist.x ||
+      (left_Shoulder.x < right_Wrist.x &&
+        right_Elbow.x < head.x &&
+        head.x < left_Elbow.x)
     ) {
-      const shoulder = left_Shoulder.x - right_Shoulder.x;
-
+      const shoulderLength = left_Shoulder.x - right_Shoulder.x;
       if (
-        shoulder > right_Shoulder.x - right_Elbow.x &&
-        shoulder > left_Elbow.x - left_Shoulder.x
+        shoulderLength > right_Shoulder.x - left_Elbow.x &&
+        shoulderLength > right_Elbow.x - left_Shoulder.x
       ) {
         if (
-          left_Wrist.x > left_Shoulder.x ||
-          right_Shoulder.x < right_Wrist.x
+          right_Shoulder.y > left_Wrist.y &&
+          left_Shoulder.y > right_Wrist.y
         ) {
           return true;
         } else {
@@ -124,46 +128,25 @@ const TurtleNeck = () => {
     }
   };
 
-  const SwitchPage = (pose) => {
-    const head = pose.keypoints[0].position;
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (
-      head.y < right_Wrist.y < right_Elbow.y &&
-      head.y < left_Wrist.y < left_Elbow.y
-    ) {
-      if (
-        (right_Wrist.y && left_Wrist.y) < head.y &&
-        (left_Elbow.y && right_Elbow.y) > head.y
-      ) {
-        keepPosture.push(true);
-
-        return true;
-      } else {
-        keepPosture.pop();
-
-        return false;
-      }
-    } else {
-      return false;
-    }
-  };
-
   return (
-    <TurtleNeckWrap>
+    <ArmStretchingWrap>
       <div className='count-down'>Count Down : {poseTime} s</div>
       <div className='maintain-time'>Maintain Time : {bestPerform} s</div>
+      <canvas ref={canvasRef} className='canvas' />
       <Webcam ref={webcamRef} className='webcam' />
-    </TurtleNeckWrap>
+      <div className='text-area-title'>ArmStretching</div>
+      <div className='text-area-description'>
+        두 팔을 들어 120'c 각도를 유지한 채로 날개뼈를 모으고 고개를 들면서 팔을
+        안쪽으로 당기는 느낌을 받으며 당겨줍니다. 그 자세로 최소 10초 이상
+        유지합니다.
+      </div>
+    </ArmStretchingWrap>
   );
 };
 
-export default TurtleNeck;
+export default ArmStretching;
 
-const TurtleNeckWrap = styled.div`
+const ArmStretchingWrap = styled.div`
   position: relative;
   margin-left: auto;
   margin-right: auto;
@@ -191,17 +174,18 @@ const TurtleNeckWrap = styled.div`
     border-radius: 10px;
     font-size: 25px;
   }
-
   .webcam {
     position: absolute;
-    top: 105px;
+    top: 60px;
     left: 0;
     width: 100%;
     height: 600px;
   }
+
   .canvas {
+    z-index: 10;
     position: absolute;
-    top: 105px;
+    top: 60px;
     left: 0;
     width: 100%;
     height: 600px;
