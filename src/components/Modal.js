@@ -2,14 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import Portal from './Portal';
 
-function Modal({
+const Modal = ({
+  backGroundColor,
   className,
   visible,
   closable,
   backGroundClosable,
   onClose,
   children,
-}) {
+}) => {
   const onMaskClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose(e);
@@ -24,7 +25,7 @@ function Modal({
 
   return (
     <Portal elementId='modal'>
-      <ModalOverlay visible={visible} />
+      <ModalOverlay visible={visible} backGroundColor={backGroundColor} />
       <ModalWrapper
         className={className}
         onClick={backGroundClosable ? onMaskClick : null}
@@ -41,7 +42,19 @@ function Modal({
       </ModalWrapper>
     </Portal>
   );
-}
+};
+
+const ModalOverlay = styled.div`
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: ${(props) =>
+    props.backGroundColor ? 'rgba(249, 60, 60, 0.6)' : 'rgba(0, 0, 0, 0.6)'};
+  z-index: 999;
+`;
 
 const ModalWrapper = styled.div`
   box-sizing: border-box;
@@ -53,17 +66,6 @@ const ModalWrapper = styled.div`
   z-index: 1000;
   overflow: auto;
   outline: 0;
-`;
-
-const ModalOverlay = styled.div`
-  box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
 `;
 
 const ModalInner = styled.div`

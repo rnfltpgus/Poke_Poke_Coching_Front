@@ -4,10 +4,10 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { userState } from '../recoil/atom';
 import { signOutGoogle, auth } from '../auth/firebase';
-
-import styled from 'styled-components';
 import GuideLines from './GuideLines';
 import Modal from './Modal';
+
+import styled from 'styled-components';
 
 const Header = () => {
   const isLogins = useSetRecoilState(userState);
