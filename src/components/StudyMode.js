@@ -35,7 +35,7 @@ const StudyMode = () => {
   const default_Left_Eye_Position = [];
   const keepPosture = [];
   let warnings = conditionCheck.warnings;
-  let waringCount;
+  let warningCount = conditionCheck.warnings;
 
   const poseDetect = async (poseNetLoad, countAudio) => {
     if (
@@ -66,12 +66,12 @@ const StudyMode = () => {
         left_InitialValues && default_Left_Eye_Position.push(left_Eye.y);
 
         if (coordinateDifference > 30) {
-          waringCount = Math.floor(warnings / 150);
           warnings = warnings + 1;
+          warningCount = Math.floor(warnings / 150);
           countAudio.play();
-          condition({ warnings: waringCount, studyModeOn: false });
+          condition({ warnings: warningCount, studyModeOn: false });
         } else {
-          condition({ warnings: waringCount, studyModeOn: true });
+          condition({ warnings: warningCount, studyModeOn: true });
         }
 
         if (Math.ceil(coordinateDifference <= 30)) {
@@ -157,7 +157,7 @@ const StudyMode = () => {
 
   const modeStop = () => {
     setIsStartPose(false);
-    condition({ warnings: conditionCheck.warnings, studyModeOn: false });
+    condition({ warnings: 0, studyModeOn: false });
     clearInterval(interval);
   };
 

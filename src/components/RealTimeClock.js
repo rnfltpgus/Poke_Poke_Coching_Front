@@ -66,7 +66,7 @@ export default RealTimeClock;
 const RealTimeClockWrap = styled.div`
   display: flex;
   width: 95%;
-  margin: 45px auto 10px auto;
+  margin: 40px auto 10px auto;
 
   .realtime-header {
     background-color: #948df9;
