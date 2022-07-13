@@ -5,7 +5,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userState } from '../recoil/atom';
 import { signOutGoogle, auth } from '../auth/firebase';
 import GuideLines from './GuideLines';
-import Modal from './Modal';
+import Modal from './modal/Modal';
 
 import styled from 'styled-components';
 
