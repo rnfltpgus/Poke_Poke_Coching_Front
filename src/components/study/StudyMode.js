@@ -1,11 +1,10 @@
 import React, { useState, useRef } from 'react';
-import Webcam from 'react-webcam';
 import { useNavigate } from 'react-router-dom';
+import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
-import { drawKeyPoints, drawSkeleton } from '../../util/tensorflow/utils';
 import { sound } from '../../util/music/index';
 
 import styled from 'styled-components';
@@ -14,7 +13,6 @@ let interval;
 
 const StudyMode = () => {
   const webcamRef = useRef(null);
-  const canvasRef = useRef(null);
   const navigate = useNavigate();
   const [isStartPose, setIsStartPose] = useState(false);
   const condition = useSetRecoilState(conditionState);
@@ -51,11 +49,10 @@ const StudyMode = () => {
 
       const pose = await poseNetLoad.estimateSinglePose(video);
       const correctPosture = handsBehindNeckSignSwitchPage(pose);
-      const poseKeyPoints = pose.keypoints;
 
-      for (let i = 0; i < poseKeyPoints.length; i++) {
-        const right_Eye = poseKeyPoints[1].position;
-        const left_Eye = poseKeyPoints[2].position;
+      for (let i = 0; i < pose.keypoints.length; i++) {
+        const left_Eye = pose.keypoints[1].position;
+        const right_Eye = pose.keypoints[2].position;
         const right_InitialValues = default_Right_Eye_Position.length < 1;
         const left_InitialValues = default_Right_Eye_Position.length < 1;
         const coordinateDifference = Math.ceil(
@@ -67,7 +64,7 @@ const StudyMode = () => {
 
         if (coordinateDifference > 30) {
           warnings = warnings + 1;
-          warningCount = Math.floor(warnings / 150);
+          warningCount = Math.floor(warnings / 170);
           countAudio.play();
           condition({ warnings: warningCount, studyModeOn: false });
         } else {
@@ -86,19 +83,7 @@ const StudyMode = () => {
           navigate('/stretchingpage');
         }
       }
-
-      // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
-  };
-
-  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
-    const minPartConfidence = 0.7;
-    const context = canvas.current.getContext('2d');
-    canvas.current.width = videoWidth;
-    canvas.current.height = videoHeight;
-
-    drawKeyPoints(pose.keypoints, minPartConfidence, context);
-    drawSkeleton(pose.keypoints, minPartConfidence, context);
   };
 
   const checkPutYourHandsUp = (pose) => {
@@ -165,7 +150,6 @@ const StudyMode = () => {
     return (
       <StudyModeWrap>
         <span className='study-mode-title'>공부 모드</span>
-        <canvas ref={canvasRef} className='canvas' />
         <Webcam ref={webcamRef} className='webcam' />
         <button onClick={modeStop} className='secondary-btn'>
           Mode Stop
@@ -197,15 +181,6 @@ const StudyModeWrap = styled.div`
   height: 100%;
 
   .webcam {
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    height: 600px;
-  }
-
-  .canvas {
-    z-index: 10;
     position: absolute;
     top: 60px;
     left: 0;

@@ -1,5 +1,5 @@
 import turtleneck from './turtleneck.gif';
 
-export const poseImages = {
+export const poseImage = {
   TurtleNeck: turtleneck,
 };

@@ -4,7 +4,6 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Main from '../pages/Main';
 import Login from '../pages/Login';
-import MyPage from '../pages/MyPage';
 import StudyPage from '../pages/StudyPage';
 import StretchingPage from '../pages/StretchingPage';
 
@@ -27,7 +26,6 @@ const App = () => {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/' element={<Main />} />
-        {/* <Route path='/mypage' element={<MyPage />} /> */}
         <Route path='/studypage' element={<StudyPage />} />
         <Route path='/stretchingpage' element={<StretchingPage />} />
       </Routes>

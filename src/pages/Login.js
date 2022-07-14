@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleButton } from 'react-google-button';
 import { useRecoilValue } from 'recoil';
+
 import { userState } from '../recoil/atom';
 import { signInWithGoogle } from '../auth/firebase';
 
@@ -20,7 +21,7 @@ const Login = () => {
   return (
     <LoginWrap>
       <div className='login-image-container'>
-        <img src='/img/Logo.png' />
+        <img src='/img/Logo.png' alt='logo-imag' />
       </div>
       <GoogleButton onClick={signInWithGoogle} className='google-btn' />
       <div className='login-footer'>
