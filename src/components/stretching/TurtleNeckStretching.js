@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Webcam from 'react-webcam';
 import { useNavigate } from 'react-router-dom';
+import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
 
 import { very } from '../../util/music/index';
@@ -8,6 +8,7 @@ import { very } from '../../util/music/index';
 import styled from 'styled-components';
 
 let flag = false;
+let poseList = ['TurtleNeck', 'Arm', 'SideNeck'];
 
 const TurtleNeckStretching = () => {
   const webcamRef = useRef(null);
@@ -16,10 +17,17 @@ const TurtleNeckStretching = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [poseTime, setPoseTime] = useState(0);
   const [bestPerform, setBestPerform] = useState(0);
+  const [currentPose, setCurrentPose] = useState('TurtleNeck');
 
   useEffect(() => {
     runPoseNet();
   }, []);
+
+  useEffect(() => {
+    setCurrentTime(0);
+    setPoseTime(0);
+    setBestPerform(0);
+  }, [currentPose]);
 
   useEffect(() => {
     const timeDiff = (currentTime - startingTime) / 1000;
@@ -78,12 +86,12 @@ const TurtleNeckStretching = () => {
         setCurrentTime(0);
       }
 
-      if (studyModeSwitchPage) {
-        if (keepPosture.length === 3) {
-          countAudio.pause();
-          navigate('/studypage');
-        }
-      }
+      // if (studyModeSwitchPage) {
+      //   if (keepPosture.length === 3) {
+      //     countAudio.pause();
+      //     navigate('/studypage');
+      //   }
+      // }
     }
   };
 
