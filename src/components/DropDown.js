@@ -1,11 +1,10 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
 
 import useDetectOutsideClick from '../util/hooks/useDetectOutsideClick';
 
 import styled from 'styled-components';
 
-const DropDown = () => {
+const DropDown = ({ poseList, currentPose, setCurrentPose }) => {
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
   const onClick = () => setIsActive(!isActive);
@@ -14,22 +13,21 @@ const DropDown = () => {
     <DropDownWrap className='container'>
       <div className='menu-container'>
         <button onClick={onClick} className='menu-trigger'>
-          <span>스트레칭 모드 선택</span>
+          <span>{currentPose}</span>
           <img src='img/turtle.png' alt='stretching mode icon' />
         </button>
         <nav
           ref={dropdownRef}
           className={`menu ${isActive ? 'active' : 'inactive'}`}>
           <ul>
-            <li>
-              <Link to=':turtleneck'>TurtleNeck</Link>
-            </li>
-            <li>
-              <Link to=':arm'>Arm</Link>
-            </li>
-            <li>
-              <Link to=':sideneck'>SideNeck</Link>
-            </li>
+            {poseList &&
+              poseList.map((pose, index) => (
+                <li onClick={() => setCurrentPose(pose)} key={index}>
+                  <div>
+                    <p>{pose}</p>
+                  </div>
+                </li>
+              ))}
           </ul>
         </nav>
       </div>

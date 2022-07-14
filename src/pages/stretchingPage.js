@@ -1,5 +1,4 @@
 import React from 'react';
-// import { useParams } from 'react-router-dom';
 
 import TurtleNeckStretching from '../components/stretching/TurtleNeckStretching';
 import ArmStretching from '../components/stretching/ArmStretching';
@@ -10,7 +9,6 @@ import DropDown from '../components/DropDown';
 import styled from 'styled-components';
 
 const StretchingPage = () => {
-  // const { turtleneck, arm, sideneck } = useParams;
   return (
     <StretchingWrap>
       <div className='stretching-container'>
@@ -19,7 +17,7 @@ const StretchingPage = () => {
           <DropDown />
         </div>
         <div className='stretching-mode'>
-          {/* <TurtleNeckStretching /> */}
+          <TurtleNeckStretching />
           {/* <ArmStretching /> */}
           {/* <SideNeckStretching /> */}
         </div>

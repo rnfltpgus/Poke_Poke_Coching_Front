@@ -4,6 +4,7 @@ import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
 
 import { very } from '../../util/music/index';
+import DropDown from '../DropDown';
 
 import styled from 'styled-components';
 
@@ -162,9 +163,14 @@ const TurtleNeckStretching = () => {
 
   return (
     <TurtleNeckStretchingWrap>
+      <DropDown
+        poseList={poseList}
+        currentPose={currentPose}
+        setCurrentPose={setCurrentPose}
+      />
       <div className='count-down'>Count Down : {poseTime} s</div>
       <div className='maintain-time'>Maintain Time : {bestPerform} s</div>
-      <Webcam ref={webcamRef} className='webcam' />
+      {/* <Webcam ref={webcamRef} className='webcam' /> */}
     </TurtleNeckStretchingWrap>
   );
 };
