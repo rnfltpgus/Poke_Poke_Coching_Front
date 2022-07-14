@@ -6,7 +6,7 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
 import { drawKeyPoints, drawSkeleton } from '../../util/tensorflow/utils';
-import { loud } from '../../util/music/index';
+import { sound } from '../../util/music/index';
 
 import styled from 'styled-components';
 
@@ -24,7 +24,7 @@ const StudyMode = () => {
     const poseNetLoad = await poseNet.load({
       scale: 0.8,
     });
-    const countAudio = new Audio(loud);
+    const countAudio = new Audio(sound);
 
     interval = setInterval(() => {
       poseDetect(poseNetLoad, countAudio);

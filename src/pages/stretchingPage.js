@@ -15,9 +15,9 @@ const StretchingPage = () => {
           <span className='stretching-mode-title'>거북목 교정 스트레칭</span>
         </div>
         <div className='stretching-mode'>
-          {/* <TurtleNeckStretching /> */}
+          <TurtleNeckStretching />
           {/* <ArmStretching /> */}
-          <SideNeckStretching />
+          {/* <SideNeckStretching /> */}
         </div>
       </div>
       <TextCard />
