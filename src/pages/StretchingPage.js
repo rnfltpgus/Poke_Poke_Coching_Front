@@ -145,10 +145,14 @@ const TurtleNeckStretching = () => {
         shoulder > left_Elbow.x - left_Shoulder.x
       ) {
         if (
-          left_Wrist.x > left_Shoulder.x ||
-          right_Shoulder.x < right_Wrist.x
+          left_Wrist.x > left_Shoulder.x &&
+          right_Shoulder.x > right_Wrist.x
         ) {
-          return true;
+          if (left_Elbow.y > left_Wrist.y && right_Elbow.y > right_Wrist.y) {
+            return true;
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
@@ -269,7 +273,7 @@ const TurtleNeckStretching = () => {
         </div>
         <div className='stretching-mode'>
           <div className='count-down'>Count Down : {poseTime} s</div>
-          <div className='maintain-time'>
+          <div className='max-maintain-time'>
             Max Maintain Time : {bestPerform} s
           </div>
           <Webcam ref={webcamRef} className='webcam' />
@@ -331,7 +335,7 @@ const TurtleNeckStretchingWrap = styled.div`
     font-size: 20px;
   }
 
-  .maintain-time {
+  .max-maintain-time {
     background-color: #4485f4;
     color: #fff;
     padding: 5px;

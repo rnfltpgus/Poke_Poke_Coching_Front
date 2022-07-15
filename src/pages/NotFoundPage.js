@@ -8,7 +8,7 @@ const NotFoundPage = () => {
   return (
     <NotFoundPageWrap>
       <div className='not-found-container'>
-        <div className='not-found-title'>NotFoundPage</div>
+        <div className='not-found-title'>Not Found Page</div>
         <div>페이지를 찾을 수 없습니다.</div>
         <div>페이지가 존재하지 않거나, 사용할 수 없는 페이지 입니다.</div>
         <div>입력하신 주소가 정확한지 다시 한번 확인해주세요.</div>
