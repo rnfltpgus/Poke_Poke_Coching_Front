@@ -38,14 +38,6 @@ const DropDown = ({ poseList, currentPose, setCurrentPose }) => {
 export default DropDown;
 
 const DropDownWrap = styled.div`
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
   img {
     justify-content: center;
     align-items: center;
@@ -59,8 +51,7 @@ const DropDownWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
-    margin-right: 10px;
+    margin: 10px 20px;
   }
 
   .menu-trigger {
@@ -73,6 +64,7 @@ const DropDownWrap = styled.div`
     padding: 4px 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     border: none;
+    width: 100%;
     vertical-align: middle;
     transition: box-shadow 0.4s ease;
     margin-left: auto;
@@ -85,7 +77,7 @@ const DropDownWrap = styled.div`
   .menu-trigger span {
     font-weight: 700;
     vertical-align: middle;
-    font-size: 14px;
+    font-size: 20px;
     margin: 0 10px;
   }
 
@@ -97,9 +89,9 @@ const DropDownWrap = styled.div`
     background: #ffffff;
     border-radius: 8px;
     position: absolute;
-    top: 60px;
+    top: 48px;
     right: 0;
-    width: 300px;
+    width: 100%;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
     opacity: 0;
     visibility: hidden;
@@ -123,10 +115,10 @@ const DropDownWrap = styled.div`
     border-bottom: 1px solid #dddddd;
   }
 
-  .menu li a {
+  .menu li p {
     text-decoration: none;
     color: #333333;
-    padding: 15px 20px;
+    padding: 5px 20px;
     display: block;
   }
 `;
