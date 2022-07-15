@@ -18,7 +18,6 @@ const NotFoundPage = () => {
           }}>
           이전 페이지
         </button>
-        <div className='not-found-con'></div>
         <img src='img/404page.png' alt='404page imgs' />
       </div>
     </NotFoundPageWrap>
@@ -29,33 +28,50 @@ export default NotFoundPage;
 
 const NotFoundPageWrap = styled.div`
   background-color: #f3ffcc;
-  top: 0px;
+  height: 400px;
 
   .not-found-container {
     position: relative;
-    width: 780px;
-    /* margin: 7% auto 0; */
+    width: 840px;
+    margin: 15% auto 0;
     padding: 30px 0 15px;
   }
 
   .not-found-title {
-    margin-bottom: 10px;
+    margin-top: 40px;
+    font-weight: bold;
+    font-size: 40px;
+  }
+
+  .not-found-container > div {
+    margin-bottom: 40px;
   }
 
   .not-found-container > img {
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 400px;
-    height: 430px;
+    width: 370px;
+    height: 370px;
     border-radius: 10px;
+    margin-top: 15px;
+  }
+
+  .not-found-container > button {
+    background-color: #4485f4;
+    font-size: 17px;
+    font-weight: bold;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    transform: translateY(0);
+    border-radius: 5px;
+    height: 40px;
+    width: 120px;
+  }
+
+  .not-found-container > button:hover {
+    transform: translateY(-3px);
   }
 `;
-
-// block content
-//   div.notFound-container
-//     a(href="/")
-//       img(src="../images/VotingLogo.png", alt="logo")
-//     h2 404. Not Found!
-//     p= `The requested URL ${path} was not found on this server. That’s all we know.`
-//     img(src="../images/404Image.png", alt="404")

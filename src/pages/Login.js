@@ -56,6 +56,6 @@ const LoginWrap = styled.div`
   }
 
   .google-btn:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px);
   }
 `;
