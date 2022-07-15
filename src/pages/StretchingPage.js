@@ -69,7 +69,6 @@ const TurtleNeckStretching = () => {
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
-      console.log(currentPose);
       const pose = await poseNetLoad.estimateSinglePose(video);
       let correctPosture = false;
       const studyModeSwitchPage = fightingPoseSwitchPage(pose);

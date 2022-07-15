@@ -16,7 +16,7 @@ const Login = () => {
     if (user.displayName) {
       navigate('/');
     }
-  }, [user.displayName]);
+  }, [navigate, user.displayName]);
 
   return (
     <LoginWrap>

@@ -10,14 +10,14 @@ import StretchingPage from '../pages/StretchingPage';
 import GlobalStyles from './GlobalStyles';
 
 const App = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('name');
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigator('/login');
+      navigate('/login');
     }
-  }, [isLoggedIn, navigator]);
+  }, [isLoggedIn, navigate]);
 
   return (
     <>
