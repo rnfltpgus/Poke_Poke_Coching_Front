@@ -1,12 +1,9 @@
-import React, { useRef } from 'react';
-
-import useDetectOutsideClick from '../../util/hooks/useDetectOutsideClick';
+import React, { useState } from 'react';
 
 import styled from 'styled-components';
 
 const DropDown = ({ poseList, currentPose, setCurrentPose }) => {
-  const dropdownRef = useRef(null);
-  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+  const [isActive, setIsActive] = useState(false);
   const onClick = () => setIsActive(!isActive);
 
   return (
@@ -16,9 +13,7 @@ const DropDown = ({ poseList, currentPose, setCurrentPose }) => {
           <span>{currentPose}</span>
           <img src='img/turtle.png' alt='stretching mode icon' />
         </button>
-        <nav
-          ref={dropdownRef}
-          className={`menu ${isActive ? 'active' : 'inactive'}`}>
+        <nav className={`menu ${isActive ? 'active' : 'inactive'}`}>
           <ul>
             {poseList &&
               poseList.map((pose, index) => (
