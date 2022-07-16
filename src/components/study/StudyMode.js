@@ -75,9 +75,10 @@ const StudyMode = () => {
           countAudio.pause();
         }
       }
+      console.log(keepPosture);
 
       if (correctPosture) {
-        if (keepPosture.length === 20) {
+        if (keepPosture.length === 30) {
           countAudio.pause();
           condition({ studyModeOn: false });
           navigate('/stretchingpage');
