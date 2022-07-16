@@ -28,12 +28,14 @@ export default NotFoundPage;
 
 const NotFoundPageWrap = styled.div`
   background-color: #f3ffcc;
-  height: 400px;
+  height: 100vh;
+  position: relative;
 
   .not-found-container {
-    position: relative;
+    position: absolute;
     width: 840px;
-    margin: 15% auto 0;
+    left: 26%;
+    top: 22%;
     padding: 30px 0 15px;
   }
 
