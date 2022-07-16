@@ -3,19 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 import * as poseNet from '@tensorflow-models/posenet';
 
-import { very } from '../util/music/index';
-import DropDown from '../components/DropDown';
+import DropDown from '../components/dropdown/DropDown';
+import TurtleNeckStretching from '../util/tensorflow/posturecheck/TurtleNeckStretching';
+import ArmStretching from '../util/tensorflow/posturecheck/ArmStretching';
+import SideNeckStretching from '../util/tensorflow/posturecheck/SideNeckStretching';
+import drawCanvas from '../util/helpers/drawCanvas';
 import { poseImage } from '../util/images/index';
-import { drawKeyPoints, drawSkeleton } from '../util/tensorflow/utils';
+import { poseInstructions } from '../util/data';
+import { very } from '../util/music/index';
 
 import styled from 'styled-components';
-import { poseInstructions } from '../util/data';
 
 let poseList = ['TurtleNeck', 'Arm', 'SideNeck'];
 let flag = false;
 let interval;
 
-const TurtleNeckStretching = () => {
+const StretchingPage = () => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const navigate = useNavigate();
@@ -71,31 +74,26 @@ const TurtleNeckStretching = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      let correctPosture = false;
-      const studyModeSwitchPage = fightingPoseSwitchPage(pose);
-
-      console.log('🍅 자세 불리언 값', correctPosture);
-      console.log('🥝 자세 포즈 값', pose.score);
-      console.log(currentPose);
-      console.log(keepPosture);
+      const studyModeSwitchPages = switchPage(pose);
+      let isCorrectPosture = false;
 
       if (currentPose === 'TurtleNeck') {
-        correctPosture = checkTurtleNeckStretching(pose);
+        isCorrectPosture = TurtleNeckStretching(pose);
       }
 
       if (currentPose === 'Arm') {
-        correctPosture = checkArmStretching(pose);
+        isCorrectPosture = ArmStretching(pose);
       }
 
       if (currentPose === 'SideNeck') {
-        correctPosture = checkSideNeckStretching(pose);
+        isCorrectPosture = SideNeckStretching(pose);
       }
 
       if (flag === null) {
         return;
       }
 
-      if (correctPosture === true && pose.score > 0.6) {
+      if (isCorrectPosture === true && pose.score > 0.6) {
         if (!flag) {
           countAudio.play();
           setStartingTime(new Date(Date()).getTime());
@@ -109,75 +107,18 @@ const TurtleNeckStretching = () => {
         setCurrentTime(0);
       }
 
-      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef, flag);
-
-      // if (studyModeSwitchPage) {
-      //   if (keepPosture.length === 30) {
-      //     countAudio.pause();
-      //     navigate('/studypage');
-      //   }
-      // }
-    }
-  };
-
-  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas, flag) => {
-    const minPartConfidence = 0.7;
-    const context = canvas.current.getContext('2d');
-    canvas.current.width = videoWidth;
-    canvas.current.height = videoHeight;
-
-    drawSkeleton(pose.keypoints, minPartConfidence, context, flag);
-    drawKeyPoints(pose.keypoints, minPartConfidence, context, flag);
-  };
-
-  const checkTurtleNeckStretching = (pose) => {
-    const head = pose.keypoints[0].position;
-    const left_Ear = pose.keypoints[3].position;
-    const right_Ear = pose.keypoints[4].position;
-    const left_Shoulder = pose.keypoints[5].position;
-    const right_Shoulder = pose.keypoints[6].position;
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (
-      right_Wrist.y > right_Shoulder.y &&
-      left_Wrist.y > left_Shoulder.y &&
-      right_Elbow.x < head.x &&
-      head.x < left_Elbow.x
-    ) {
-      const shoulder = left_Shoulder.x - right_Shoulder.x;
-
-      if (
-        shoulder > right_Shoulder.x - right_Elbow.x &&
-        shoulder > left_Elbow.x - left_Shoulder.x
-      ) {
-        if (
-          left_Wrist.x > left_Shoulder.x &&
-          right_Shoulder.x > right_Wrist.x
-        ) {
-          if (left_Elbow.y > left_Wrist.y && right_Elbow.y > right_Wrist.y) {
-            if (head.y < left_Ear.y && right_Ear.y) {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            return false;
-          }
-        } else {
-          return false;
+      if (studyModeSwitchPages) {
+        if (keepPosture.length === 30) {
+          countAudio.pause();
+          navigate('/studypage');
         }
-      } else {
-        return false;
       }
-    } else {
-      return false;
+
+      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef, flag);
     }
   };
 
-  const fightingPoseSwitchPage = (pose) => {
+  const switchPage = (pose) => {
     const head = pose.keypoints[0].position;
     const left_Elbow = pose.keypoints[7].position;
     const right_Elbow = pose.keypoints[8].position;
@@ -205,88 +146,8 @@ const TurtleNeckStretching = () => {
     }
   };
 
-  const checkArmStretching = (pose) => {
-    const left_Shoulder = pose.keypoints[5].position;
-    const right_Shoulder = pose.keypoints[6].position;
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (right_Shoulder.x > left_Wrist.x || left_Shoulder.x < right_Wrist.x) {
-      const shoulderLength = left_Shoulder.x - right_Shoulder.x;
-
-      if (
-        shoulderLength > right_Shoulder.x - left_Elbow.x &&
-        shoulderLength > right_Elbow.x - left_Shoulder.x
-      ) {
-        if (
-          (right_Shoulder.y > right_Wrist.y &&
-            right_Wrist.y < left_Elbow.y &&
-            left_Elbow.y > right_Elbow.y &&
-            right_Wrist.y) ||
-          (left_Shoulder.y > left_Wrist.y &&
-            left_Wrist.y < right_Elbow.y &&
-            right_Elbow.y > left_Elbow.y &&
-            left_Wrist.y)
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  };
-
-  const checkSideNeckStretching = (pose) => {
-    const head = pose.keypoints[0].position;
-    const left_Shoulder = pose.keypoints[5].position;
-    const right_Shoulder = pose.keypoints[6].position;
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (
-      right_Wrist.y > (left_Wrist.y && left_Elbow.y && left_Shoulder.y) ||
-      left_Wrist.y > (right_Wrist.y && right_Elbow.y && right_Shoulder.y)
-    ) {
-      if (
-        right_Elbow.y > (left_Wrist.y && left_Elbow.y && left_Shoulder.y) ||
-        left_Elbow.y > (right_Wrist.y && right_Elbow.y && right_Shoulder.y)
-      ) {
-        if (
-          (head.y > right_Wrist.y && right_Elbow.y < right_Shoulder.y) ||
-          (head.y > left_Wrist.y && left_Elbow.y < left_Shoulder.y)
-        ) {
-          if (
-            (left_Wrist.y < right_Shoulder.y &&
-              right_Wrist.x &&
-              right_Elbow.x) < right_Shoulder.x ||
-            (right_Wrist.y < left_Shoulder.y && left_Wrist.x && left_Elbow.x) >
-              left_Shoulder.x
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  };
-
   return (
-    <TurtleNeckStretchingWrap>
+    <StretchingPageWrap>
       <div className='stretching-container'>
         <div className='stretching-ex'>
           <DropDown
@@ -312,13 +173,13 @@ const TurtleNeckStretching = () => {
       <div className='text-area-description'>
         {poseInstructions[currentPose]}
       </div>
-    </TurtleNeckStretchingWrap>
+    </StretchingPageWrap>
   );
 };
 
-export default TurtleNeckStretching;
+export default StretchingPage;
 
-const TurtleNeckStretchingWrap = styled.div`
+const StretchingPageWrap = styled.div`
   div {
     line-height: 40px;
     text-align: center;

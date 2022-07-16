@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-import useDetectOutsideClick from '../util/hooks/useDetectOutsideClick';
+import useDetectOutsideClick from '../../util/hooks/useDetectOutsideClick';
 
 import styled from 'styled-components';
 
