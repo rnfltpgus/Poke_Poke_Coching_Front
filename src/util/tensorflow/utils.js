@@ -1,7 +1,7 @@
 import * as poseNet from '@tensorflow-models/posenet';
 import * as tf from '@tensorflow/tfjs';
 
-const trueColor = '#23ffc4';
+const trueColor = '#ff53ee';
 const falseColor = '#dcf7ff';
 const color = '#948df9';
 const lineWidth = 7;
