@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { userState } from '../recoil/atom';
-import { signOutGoogle, auth } from '../auth/firebase';
-import GuideLines from './GuideLines';
-import Modal from './modal/Modal';
+import { userState } from '../../recoil/atom';
+import { signOutGoogle, auth } from '../../auth/firebase';
+import GuideLines from '../guideline/GuideLines';
+import Modal from '../modal/Modal';
 
 import styled from 'styled-components';
 

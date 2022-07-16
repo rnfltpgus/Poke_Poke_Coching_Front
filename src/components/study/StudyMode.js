@@ -5,6 +5,7 @@ import * as poseNet from '@tensorflow-models/posenet';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
+import HandsUp from '../../util/tensorflow/posturecheck/HandsUp';
 import { sound } from '../../util/music/index';
 
 import styled from 'styled-components';
@@ -48,7 +49,7 @@ const StudyMode = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const correctPosture = handsBehindNeckSignSwitchPage(pose);
+      const stretchingModeSwitchPages = switchPage(pose);
 
       for (let i = 0; i < pose.keypoints.length; i++) {
         const left_Eye = pose.keypoints[1].position;
@@ -75,9 +76,8 @@ const StudyMode = () => {
           countAudio.pause();
         }
       }
-      console.log(keepPosture);
 
-      if (correctPosture) {
+      if (stretchingModeSwitchPages) {
         if (keepPosture.length === 30) {
           countAudio.pause();
           condition({ studyModeOn: false });
@@ -87,38 +87,13 @@ const StudyMode = () => {
     }
   };
 
-  const checkPutYourHandsUp = (pose) => {
-    const head = pose.keypoints[0].position;
-    const left_Shoulder = pose.keypoints[5].position;
-    const right_Shoulder = pose.keypoints[6].position;
+  const switchPage = (pose) => {
     const left_Elbow = pose.keypoints[7].position;
     const right_Elbow = pose.keypoints[8].position;
     const left_Wrist = pose.keypoints[9].position;
     const right_Wrist = pose.keypoints[10].position;
 
-    if (
-      right_Elbow.y < right_Shoulder.y &&
-      left_Elbow.y < left_Shoulder.y &&
-      right_Elbow.x < head.x &&
-      head.x < left_Elbow.x
-    ) {
-      if (right_Wrist.y < head.y && left_Wrist.y < head.y) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  };
-
-  const handsBehindNeckSignSwitchPage = (pose) => {
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (checkPutYourHandsUp(pose)) {
+    if (HandsUp(pose)) {
       if (
         (right_Elbow.x < right_Wrist.x && right_Wrist.y > right_Elbow.y) ||
         (right_Elbow.x > right_Wrist.x && left_Elbow.y < left_Wrist.y)
