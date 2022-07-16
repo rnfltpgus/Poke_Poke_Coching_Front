@@ -9,6 +9,7 @@ import { poseImage } from '../util/images/index';
 import { drawKeyPoints, drawSkeleton } from '../util/tensorflow/utils';
 
 import styled from 'styled-components';
+import { poseInstructions } from '../util/data';
 
 let poseList = ['TurtleNeck', 'Arm', 'SideNeck'];
 let flag = false;
@@ -52,7 +53,7 @@ const TurtleNeckStretching = () => {
 
     interval = setInterval(() => {
       poseDetect(poseNetLoad, countAudio);
-    }, 1000);
+    }, 100);
   };
 
   const keepPosture = [];
@@ -73,6 +74,11 @@ const TurtleNeckStretching = () => {
       let correctPosture = false;
       const studyModeSwitchPage = fightingPoseSwitchPage(pose);
 
+      console.log('🍅 자세 불리언 값', correctPosture);
+      console.log('🥝 자세 포즈 값', pose.score);
+      console.log(currentPose);
+      console.log(keepPosture);
+
       if (currentPose === 'TurtleNeck') {
         correctPosture = checkTurtleNeckStretching(pose);
       }
@@ -89,12 +95,13 @@ const TurtleNeckStretching = () => {
         return;
       }
 
-      if (correctPosture === true && pose.score > 0.55) {
+      if (correctPosture === true && pose.score > 0.6) {
         if (!flag) {
           countAudio.play();
           setStartingTime(new Date(Date()).getTime());
           flag = true;
         }
+
         setCurrentTime(new Date(Date()).getTime());
       } else {
         flag = false;
@@ -102,29 +109,31 @@ const TurtleNeckStretching = () => {
         setCurrentTime(0);
       }
 
-      if (studyModeSwitchPage) {
-        if (keepPosture.length === 3) {
-          countAudio.pause();
-          navigate('/studypage');
-        }
-      }
+      drawCanvas(pose, video, videoWidth, videoHeight, canvasRef, flag);
 
-      // drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
+      // if (studyModeSwitchPage) {
+      //   if (keepPosture.length === 30) {
+      //     countAudio.pause();
+      //     navigate('/studypage');
+      //   }
+      // }
     }
   };
 
-  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas, flag) => {
     const minPartConfidence = 0.7;
     const context = canvas.current.getContext('2d');
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    drawKeyPoints(pose.keypoints, minPartConfidence, context);
-    drawSkeleton(pose.keypoints, minPartConfidence, context);
+    drawSkeleton(pose.keypoints, minPartConfidence, context, flag);
+    drawKeyPoints(pose.keypoints, minPartConfidence, context, flag);
   };
 
   const checkTurtleNeckStretching = (pose) => {
     const head = pose.keypoints[0].position;
+    const left_Ear = pose.keypoints[3].position;
+    const right_Ear = pose.keypoints[4].position;
     const left_Shoulder = pose.keypoints[5].position;
     const right_Shoulder = pose.keypoints[6].position;
     const left_Elbow = pose.keypoints[7].position;
@@ -149,7 +158,11 @@ const TurtleNeckStretching = () => {
           right_Shoulder.x > right_Wrist.x
         ) {
           if (left_Elbow.y > left_Wrist.y && right_Elbow.y > right_Wrist.y) {
-            return true;
+            if (head.y < left_Ear.y && right_Ear.y) {
+              return true;
+            } else {
+              return false;
+            }
           } else {
             return false;
           }
@@ -231,8 +244,6 @@ const TurtleNeckStretching = () => {
 
   const checkSideNeckStretching = (pose) => {
     const head = pose.keypoints[0].position;
-    const left_Eye = pose.keypoints[1].position;
-    const right_Eye = pose.keypoints[2].position;
     const left_Shoulder = pose.keypoints[5].position;
     const right_Shoulder = pose.keypoints[6].position;
     const left_Elbow = pose.keypoints[7].position;
@@ -241,16 +252,34 @@ const TurtleNeckStretching = () => {
     const right_Wrist = pose.keypoints[10].position;
 
     if (
-      (right_Eye.x < left_Wrist.x &&
-        right_Elbow.y > right_Shoulder.y &&
-        right_Elbow.y > head.y &&
-        head.y > left_Wrist.y) ||
-      (left_Eye.x > right_Wrist.x &&
-        left_Elbow.y > left_Shoulder.y &&
-        left_Elbow.y > head.y &&
-        head.y > right_Wrist.y)
+      right_Wrist.y > (left_Wrist.y && left_Elbow.y && left_Shoulder.y) ||
+      left_Wrist.y > (right_Wrist.y && right_Elbow.y && right_Shoulder.y)
     ) {
-      return true;
+      if (
+        right_Elbow.y > (left_Wrist.y && left_Elbow.y && left_Shoulder.y) ||
+        left_Elbow.y > (right_Wrist.y && right_Elbow.y && right_Shoulder.y)
+      ) {
+        if (
+          (head.y > right_Wrist.y && right_Elbow.y < right_Shoulder.y) ||
+          (head.y > left_Wrist.y && left_Elbow.y < left_Shoulder.y)
+        ) {
+          if (
+            (left_Wrist.y < right_Shoulder.y &&
+              right_Wrist.x &&
+              right_Elbow.x) < right_Shoulder.x ||
+            (right_Wrist.y < left_Shoulder.y && left_Wrist.x && left_Elbow.x) >
+              left_Shoulder.x
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
@@ -281,9 +310,7 @@ const TurtleNeckStretching = () => {
         </div>
       </div>
       <div className='text-area-description'>
-        두 팔을 들어 120'c 각도를 유지한 채로 날개뼈를 모으고 고개를 들면서 팔을
-        안쪽으로 당기는 느낌을 받으며 당겨줍니다. 그 자세로 최소 10초 이상
-        유지합니다.
+        {poseInstructions[currentPose]}
       </div>
     </TurtleNeckStretchingWrap>
   );
