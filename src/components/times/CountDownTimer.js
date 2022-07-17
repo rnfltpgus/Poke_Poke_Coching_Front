@@ -24,11 +24,16 @@ const CountdownTimer = () => {
   return (
     <div>
       {isTimerRunning ? (
-        <TimerCountDown timerData={timer} stopCountdown={stopCountdown} />
+        <TimerCountDown
+          timerData={timer}
+          stopCountdown={stopCountdown}
+          setTimerRunning={setTimerRunning}
+        />
       ) : (
         <InputCountDown startCountdown={startCountdown} />
       )}
     </div>
   );
 };
+
 export default CountdownTimer;
