@@ -63,7 +63,7 @@ const StudyMode = () => {
         right_InitialValues && default_Right_Eye_Position.push(right_Eye.y);
         left_InitialValues && default_Left_Eye_Position.push(left_Eye.y);
 
-        if (coordinateDifference > 30) {
+        if (coordinateDifference > 50) {
           warnings = warnings + 1;
           warningCount = Math.floor(warnings / 170);
           countAudio.play();
@@ -72,7 +72,7 @@ const StudyMode = () => {
           condition({ warnings: warningCount, studyModeOn: true });
         }
 
-        if (Math.ceil(coordinateDifference <= 30)) {
+        if (Math.ceil(coordinateDifference <= 50)) {
           countAudio.pause();
         }
       }

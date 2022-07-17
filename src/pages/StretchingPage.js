@@ -43,6 +43,7 @@ const StretchingPage = () => {
     if (flag) {
       setPoseTime(timeDiff);
     }
+
     if ((currentTime - startingTime) / 1000 > bestPerform) {
       setBestPerform(timeDiff);
     }

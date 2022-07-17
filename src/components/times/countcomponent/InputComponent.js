@@ -77,9 +77,11 @@ const InputComponent = (props) => {
             </div>
           </div>
         </div>
-        <div onClick={startTimer}>
-          <button>Start</button>
-        </div>
+        <button
+          onClick={startTimer}
+          disabled={seconds === 0 && minutes === 0 && hours === 0}>
+          Start
+        </button>
       </div>
     </InputComponentWrap>
   );

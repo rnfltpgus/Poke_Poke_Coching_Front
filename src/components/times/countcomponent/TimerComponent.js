@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+import Modal from '../../modal/Modal';
+import TimerShutdownNotice from './TimerShutdownNotice';
+
 import styled from 'styled-components';
 
 let interval = 0;
@@ -7,6 +10,7 @@ let interval = 0;
 const TimerComponent = (props) => {
   const { timerData } = props;
   const [countdownTime, setCountdownTime] = useState(0);
+  const [modalOn, setModalOn] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -35,10 +39,19 @@ const TimerComponent = (props) => {
       }, 1000);
     }
 
+    if (timeLeft.seconds === '00') {
+      setModalOn(true);
+      setTimeout(() => {
+        if (modalOn === false) {
+          props.setTimerRunning();
+        }
+      }, 5000);
+    }
+
     return () => {
       clearTimeout(interval);
     };
-  });
+  }, [countdownTime, props, timeLeft.seconds]);
 
   const calculateTimeLeft = () => {
     let currantTime = new Date().getTime();
@@ -68,6 +81,10 @@ const TimerComponent = (props) => {
     props.stopCountdown();
   };
 
+  const closeModal = () => {
+    setModalOn(false);
+  };
+
   return (
     <TimerComponentWrap>
       <div className='countdown-header'>Countdown Timer</div>
@@ -90,6 +107,15 @@ const TimerComponent = (props) => {
           <button>Stop</button>
         </div>
       </div>
+      {modalOn && (
+        <Modal
+          visible={modalOn}
+          closable={true}
+          backGroundClosable={true}
+          onClose={closeModal}>
+          <TimerShutdownNotice />
+        </Modal>
+      )}
     </TimerComponentWrap>
   );
 };

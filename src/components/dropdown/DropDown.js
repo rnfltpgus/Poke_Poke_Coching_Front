@@ -4,12 +4,15 @@ import styled from 'styled-components';
 
 const DropDown = ({ poseList, currentPose, setCurrentPose }) => {
   const [isActive, setIsActive] = useState(false);
-  const onClick = () => setIsActive(!isActive);
 
   return (
     <DropDownWrap className='container'>
       <div className='menu-container'>
-        <button onClick={onClick} className='menu-trigger'>
+        <button
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+          className='menu-trigger'>
           <span>{currentPose}</span>
           <img src='img/turtle.png' alt='stretching mode icon' />
         </button>
