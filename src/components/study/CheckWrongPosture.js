@@ -31,10 +31,10 @@ const CheckWrongPosture = () => {
       <div>{currentCondition.warnings} 회</div>
       {modalOn && (
         <Modal
-          backGroundColor={true}
           visible={modalOn}
           backGroundClosable={true}
-          onClose={closeModal}>
+          onClose={closeModal}
+          backGroundColor={'rgba(249, 60, 60, 0.6)'}>
           <StudyWarningNotice />
         </Modal>
       )}

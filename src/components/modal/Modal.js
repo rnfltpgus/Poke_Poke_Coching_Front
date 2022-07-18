@@ -51,8 +51,7 @@ const ModalOverlay = styled.div`
   left: 0;
   bottom: 0;
   right: 0;
-  background-color: ${(props) =>
-    props.backGroundColor ? 'rgba(249, 60, 60, 0.6)' : 'rgba(0, 0, 0, 0.6)'};
+  background-color: ${(props) => props.backGroundColor};
   z-index: 999;
 `;
 
@@ -66,6 +65,14 @@ const ModalWrapper = styled.div`
   z-index: 1000;
   overflow: auto;
   outline: 0;
+  cursor: pointer;
+  transition: 800ms ease all;
+  transform: translateY(-30px);
+
+  &:hover {
+    background: rgb(255, 255, 255, 0.6);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0);
+  }
 `;
 
 const ModalInner = styled.div`
