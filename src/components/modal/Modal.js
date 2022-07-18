@@ -67,7 +67,6 @@ const ModalWrapper = styled.div`
   outline: 0;
   cursor: pointer;
   transition: 800ms ease all;
-  transform: translateY(-30px);
 
   &:hover {
     background: rgb(255, 255, 255, 0.6);

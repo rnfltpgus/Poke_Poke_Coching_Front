@@ -31,8 +31,8 @@ const RealTimeClock = () => {
 
     if (currentCondition.studyModeOn) {
       interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 10);
-      }, 10);
+        setTime((prevTime) => prevTime + 1000);
+      }, 1000);
     } else {
       clearInterval(interval);
     }

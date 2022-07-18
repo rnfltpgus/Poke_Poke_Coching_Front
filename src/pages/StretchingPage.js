@@ -167,7 +167,7 @@ const StretchingPage = () => {
           <div className='max-maintain-time'>
             Max Maintain Time : {bestPerform} s
           </div>
-          <Webcam ref={webcamRef} className='webcam' />
+          <Webcam mirrored={true} ref={webcamRef} className='webcam' />
           <canvas ref={canvasRef} className='canvas' />
         </div>
       </div>
@@ -248,6 +248,7 @@ const StretchingPageWrap = styled.div`
     left: 0;
     width: 100%;
     height: 600px;
+    transform: rotateY(180deg);
   }
 
   .pose-image-gif {

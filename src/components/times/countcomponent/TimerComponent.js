@@ -39,7 +39,11 @@ const TimerComponent = (props) => {
       }, 1000);
     }
 
-    if (timeLeft.seconds === '00') {
+    if (
+      timeLeft.hours === '00' &&
+      timeLeft.minutes === '00' &&
+      timeLeft.seconds === '00'
+    ) {
       setModalOn(true);
       interval = setTimeout(() => {
         if (modalOn === false) {
