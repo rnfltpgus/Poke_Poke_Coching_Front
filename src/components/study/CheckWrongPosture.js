@@ -16,13 +16,13 @@ const CheckWrongPosture = () => {
   };
 
   useEffect(() => {
-    if (currentCondition.warnings % 2 === 0) {
-      closeModal();
-    }
-
     if (currentCondition.warnings % 2 === 1) {
       setModalOn(true);
     }
+
+    setTimeout(() => {
+      closeModal();
+    }, 700);
   }, [currentCondition.warnings]);
 
   return (

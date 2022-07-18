@@ -19,7 +19,7 @@ const InputComponent = (props) => {
 
     if (input === 'incHours' && hours + 1 < 24) {
       setHours(hours + 1);
-    } else if (input === 'decHours') {
+    } else if (input === 'decHours' && hours - 1 >= 0) {
       setHours(hours - 1);
     } else if (input === 'incMinutes' && minutes + 1 < max) {
       setMinutes(minutes + 1);

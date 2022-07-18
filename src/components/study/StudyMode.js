@@ -62,8 +62,6 @@ const StudyMode = () => {
           head.y - default_Head_Y_Position[0],
         );
 
-        console.log('🔥 좌표 체크', head);
-
         head_X_InitialValues && default_Head_X_Position.push(head.x);
         head_Y_InitialValues && default_Head_Y_Position.push(head.y);
 
@@ -73,7 +71,7 @@ const StudyMode = () => {
           head_X_Coordinate_Difference < -100
         ) {
           warnings = warnings + 1;
-          warningCount = Math.floor(warnings / 170);
+          warningCount = Math.floor(warnings / 250);
           countAudio.play();
           condition({ warnings: warningCount, studyModeOn: false });
         } else {
@@ -131,7 +129,7 @@ const StudyMode = () => {
     return (
       <StudyModeWrap>
         <span className='study-mode-title'>공부 모드</span>
-        <Webcam ref={webcamRef} className='webcam' />
+        <Webcam mirrored={true} ref={webcamRef} className='webcam' />
         <button onClick={modeStop} className='secondary-btn'>
           Mode Stop
         </button>
