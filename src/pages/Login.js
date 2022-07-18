@@ -39,14 +39,14 @@ const LoginWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 140px;
-  height: 75vh;
+  gap: 15rem;
+  height: 90vh;
 
   .login-footer {
     position: absolute;
-    bottom: 9vh;
+    bottom: 3vh;
     align-items: center;
-    font-weight: initial;
+    font-weight: bold;
   }
 
   .google-btn {
@@ -56,6 +56,6 @@ const LoginWrap = styled.div`
   }
 
   .google-btn:hover {
-    transform: translateY(-5px);
+    transform: translateY(-7px);
   }
 `;

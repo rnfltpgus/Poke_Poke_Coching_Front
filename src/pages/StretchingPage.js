@@ -182,7 +182,7 @@ export default StretchingPage;
 
 const StretchingPageWrap = styled.div`
   div {
-    line-height: 40px;
+    line-height: 5vh;
     text-align: center;
     border-radius: 10px;
     color: black;
@@ -203,64 +203,65 @@ const StretchingPageWrap = styled.div`
   .stretching-ex {
     background-color: #dcf7ff;
     background-size: cover;
-    height: 700px;
+    height: 78.7vh;
   }
 
   .stretching-mode {
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    left: 0;
-    right: 0;
-    text-align: center;
-    width: 100%;
-    height: 100%;
+    background-color: #dcf7ff;
+    background-size: cover;
+    height: 78.7vh;
   }
 
   .count-down {
     background-color: #b1edeb;
-    padding: 5px;
+    padding: 0.6vh;
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 1.7rem;
+    width: 45vw;
+    margin: 0.8rem auto;
   }
 
   .max-maintain-time {
     background-color: #4485f4;
     color: #fff;
-    padding: 5px;
+    padding: 1vh;
     border-radius: 10px;
-    font-size: 25px;
+    font-size: 2rem;
+    width: 45vw;
+    margin: 1rem auto;
   }
 
   .webcam {
     position: absolute;
-    top: 105px;
-    left: 0;
-    width: 100%;
-    height: 600px;
-    border-radius: 10px;
+    right: 1vw;
+    width: 44.8vw;
+    height: 60vh;
   }
 
   .canvas {
     z-index: 10;
     position: absolute;
-    top: 105px;
-    left: 0;
-    width: 100%;
-    height: 600px;
+    right: 1vw;
+    width: 44.8vw;
+    height: 60vh;
     transform: rotateY(180deg);
   }
 
   .pose-image-gif {
     width: 95%;
-    height: 630px;
+    height: 68.6vh;
+    margin-top: 0.6vh;
     border-radius: 10px;
   }
 
   .text-area-description {
-    margin: auto 40px;
-    padding: 10px 10px;
+    margin: auto 3rem;
+    padding: 1rem;
     border-radius: 10px;
     background-color: #f8e9ed;
+    font-size: 1.5rem;
   }
 `;

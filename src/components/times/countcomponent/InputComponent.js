@@ -38,48 +38,41 @@ const InputComponent = (props) => {
       <div>
         <div className='countdown-display'>
           <div className='countdown-item'>
-            <div>
-              <button
-                className='increase-btn'
-                onClick={() => handleSetTimer('incHours')}></button>
-            </div>
+            <button
+              className='increase-btn'
+              onClick={() => handleSetTimer('incHours')}></button>
             <div className='countdown-time'>{hours} 시</div>
-            <div>
-              <button
-                className='decrease-btn'
-                onClick={() => handleSetTimer('decHours')}></button>
-            </div>
+            <button
+              className='decrease-btn'
+              onClick={() => handleSetTimer('decHours')}></button>
           </div>
           <div className='countdown-item'>
-            <div>
-              <button
-                className='increase-btn'
-                onClick={() => handleSetTimer('incMinutes')}></button>
-            </div>
+            <button
+              className='increase-btn'
+              onClick={() => handleSetTimer('incMinutes')}></button>
             <div className='countdown-time'>{minutes} 분</div>
-            <div>
-              <button
-                className='decrease-btn'
-                onClick={() => handleSetTimer('decMinutes')}></button>
-            </div>
+            <button
+              className='decrease-btn'
+              onClick={() => handleSetTimer('decMinutes')}></button>
           </div>
           <div className='countdown-item'>
-            <div>
-              <button
-                className='increase-btn'
-                onClick={() => handleSetTimer('incSeconds')}></button>
-            </div>
+            <button
+              className='increase-btn'
+              onClick={() => handleSetTimer('incSeconds')}></button>
             <div className='countdown-time'>{seconds} 초</div>
-            <div>
-              <button
-                className='decrease-btn'
-                onClick={() => handleSetTimer('decSeconds')}></button>
-            </div>
+            <button
+              className='decrease-btn'
+              onClick={() => handleSetTimer('decSeconds')}></button>
           </div>
         </div>
         <button
           onClick={startTimer}
-          disabled={seconds === 0 && minutes === 0 && hours === 0}>
+          disabled={seconds === 0 && minutes === 0 && hours === 0}
+          style={
+            seconds === 0 && minutes === 0 && hours === 0
+              ? { opacity: '0.5' }
+              : {}
+          }>
           Start
         </button>
       </div>
@@ -91,7 +84,7 @@ export default InputComponent;
 
 const InputComponentWrap = styled.div`
   width: 95%;
-  margin: 30px auto 10px auto;
+  margin: 4vh auto 1vw auto;
   gap: 2rem;
 
   .countdown-header {
@@ -99,33 +92,52 @@ const InputComponentWrap = styled.div`
     margin: 10px 30px;
     padding: 0 10px;
     border-radius: 10px;
+    font-size: 1.5rem;
   }
 
   .countdown-display {
     border-radius: 10px;
     width: 95%;
-    margin: 20px 10px auto;
-    gap: 2rem;
+    margin: 2rem 1rem auto;
     display: flex;
   }
 
   .increase-btn {
-    width: 20px;
-    height: 20px;
-    border-radius: 50px 50% 50% 5px;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 5rem 50% 50% 1rem;
     border: saddlebrown;
     background-color: #f898ff;
   }
 
   .decrease-btn {
-    width: 20px;
-    height: 20px;
-    border-radius: 5px 5px 50px 50%;
+    margin: 0 auto;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1rem 1rem 5rem 50%;
     border: saddlebrown;
     background-color: #ffafbd;
   }
 
   .countdown-time {
-    font-size: 18px;
+    font-size: 1.5rem;
+  }
+
+  & button {
+    border-radius: 10px;
+    border: none;
+    background-color: #4785f0;
+    color: #fff;
+    font-weight: bold;
+    width: 8vw;
+    height: 3vh;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    transform: translateY(0);
+
+    :hover {
+      transform: translateY(-3px);
+    }
   }
 `;

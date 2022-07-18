@@ -35,20 +35,20 @@ const SelectMode = styled.div`
   & div {
     padding: 10px;
     border-radius: 10px;
-    line-height: 40px;
+    line-height: 5vh;
     text-align: center;
     color: black;
     flex: 1;
-    height: 700px;
+    height: 87vh;
     box-sizing: border-box;
     font-weight: bold;
     cursor: pointer;
     transition: all 300ms ease-in-out;
     transform: translateY(0);
-  }
 
-  div:hover {
-    transform: translateY(-10px);
+    :hover {
+      transform: translateY(-10px);
+    }
   }
 
   & span {

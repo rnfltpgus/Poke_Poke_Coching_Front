@@ -30,7 +30,7 @@ export default studyPage;
 
 const StudyWrap = styled.div`
   & div {
-    line-height: 40px;
+    line-height: 5vh;
     text-align: center;
     border-radius: 10px;
     color: black;
@@ -49,11 +49,11 @@ const StudyWrap = styled.div`
 
   .webcam-view {
     background-color: #faf5d5;
-    height: 700px;
+    height: 87vh;
   }
 
   .function-mode {
     background-color: #d4d1ff;
-    height: 700px;
+    height: 87vh;
   }
 `;

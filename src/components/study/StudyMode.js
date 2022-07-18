@@ -130,7 +130,7 @@ const StudyMode = () => {
       <StudyModeWrap>
         <span className='study-mode-title'>공부 모드</span>
         <Webcam mirrored={true} ref={webcamRef} className='webcam' />
-        <button onClick={modeStop} className='secondary-btn'>
+        <button onClick={modeStop} className='secondary-stop-btn'>
           Mode Stop
         </button>
       </StudyModeWrap>
@@ -140,7 +140,7 @@ const StudyMode = () => {
   return (
     <StudyModeWrap>
       <span className='study-mode-title'>공부 모드</span>
-      <button onClick={modeStart} className='secondary-btn'>
+      <button onClick={modeStart} className='secondary-start-btn'>
         Mode Start
       </button>
     </StudyModeWrap>
@@ -161,18 +161,64 @@ const StudyModeWrap = styled.div`
 
   .webcam {
     position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    height: 600px;
+    left: 1.3rem;
+    width: 44.5vw;
+    height: 74.2vh;
+    border-radius: 10px;
   }
 
   .study-mode-title {
+    position: absolute;
     float: left;
     background-color: #d4d1ff;
     margin-top: 10px;
     margin-left: 10px;
     padding: 0 10px;
+    left: 0;
     border-radius: 10px;
+    z-index: 99;
+  }
+
+  .secondary-start-btn {
+    position: absolute;
+    top: 30vh;
+    bottom: 30vh;
+    left: 5vw;
+    right: 5vw;
+    border-radius: 10px;
+    border: none;
+    background-color: #4785f0;
+    color: #fff;
+    font-weight: bold;
+    font-size: 5rem;
+    transition: all 300ms ease-in-out;
+    transform: translateY(0);
+    cursor: pointer;
+
+    :hover {
+      transform: translateY(-15px);
+      opacity: 0.7;
+    }
+  }
+
+  .secondary-stop-btn {
+    position: absolute;
+    bottom: 1.5vh;
+    left: 1vw;
+    right: 1vw;
+    height: 17vh;
+    border-radius: 10px;
+    border: none;
+    background-color: rgb(255, 100, 100);
+    color: #fff;
+    font-weight: bold;
+    font-size: 3rem;
+    cursor: pointer;
+    transition: all 300ms ease-in-out;
+    transform: translateY(0);
+
+    :hover {
+      transform: translateY(-5px);
+    }
   }
 `;

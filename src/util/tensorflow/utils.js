@@ -1,10 +1,10 @@
 import * as poseNet from '@tensorflow-models/posenet';
 import * as tf from '@tensorflow/tfjs';
 
-const trueColor = '#ff53ee';
+const trueColor = '#2bff4f';
 const falseColor = '#dcf7ff';
 const color = '#948df9';
-const lineWidth = 7;
+const lineWidth = 5;
 
 function toTuple({ y, x }) {
   return [y, x];
@@ -53,6 +53,6 @@ export function drawKeyPoints(keypoints, minConfidence, ctx, flag, scale = 1) {
     }
 
     const { y, x } = keypoint.position;
-    drawPoint(ctx, y * scale, x * scale, 6, flag ? trueColor : falseColor);
+    drawPoint(ctx, y * scale, x * scale, 5, flag ? trueColor : falseColor);
   }
 }

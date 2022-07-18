@@ -28,7 +28,7 @@ const CheckWrongPosture = () => {
   return (
     <CheckWrongPostureWrap>
       <div className='check-wrong-posture-header'>CheckWrongPosture</div>
-      <div>{currentCondition.warnings} 회</div>
+      <div className='warnings-count'>{currentCondition.warnings} 회</div>
       {modalOn && (
         <Modal
           visible={modalOn}
@@ -46,13 +46,20 @@ export default CheckWrongPosture;
 
 const CheckWrongPostureWrap = styled.div`
   width: 95%;
-  margin: 30px auto 10px auto;
+  margin: 4vh auto 1vw auto;
   gap: 2rem;
 
   .check-wrong-posture-header {
     background-color: #f17ca4;
+    color: #fff;
     margin: 10px 30px;
     padding: 0 10px;
     border-radius: 10px;
+    font-size: 1.5rem;
+  }
+
+  .warnings-count {
+    margin-top: 2.5vh;
+    font-size: 1.5rem;
   }
 `;
