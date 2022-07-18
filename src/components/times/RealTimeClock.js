@@ -50,8 +50,7 @@ const RealTimeClock = () => {
       </div>
       <div>
         <div className='realtime-study-header'>Real Study Time</div>
-        <div className='realtime'>{currentCondition.studyModeOn}</div>
-        <div className='stopwatch-display'>
+        <div className='realtime'>
           <span>{('0' + Math.floor((time / 3600000) % 60)).slice(-2)}시 </span>
           <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}분 </span>
           <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}초 </span>
@@ -66,23 +65,26 @@ export default RealTimeClock;
 const RealTimeClockWrap = styled.div`
   display: flex;
   width: 95%;
-  margin: 40px auto 10px auto;
+  margin: 3vh auto 1vw auto;
 
   .realtime-header {
     background-color: #948df9;
     margin: 10px 30px;
     padding: 0 10px;
     border-radius: 10px;
+    font-size: 1.5rem;
   }
 
   .realtime-study-header {
     background-color: #b568f3;
+    color: #fff;
     margin: 10px 30px;
     padding: 0 10px;
     border-radius: 10px;
+    font-size: 1.5rem;
   }
 
   .realtime {
-    font-size: 17px;
+    font-size: 1.4rem;
   }
 `;

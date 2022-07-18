@@ -39,8 +39,8 @@ const DropDownWrap = styled.div`
   img {
     justify-content: center;
     align-items: center;
-    width: 30px;
-    height: 30px;
+    width: 2.5rem;
+    height: 2.5rem;
     border-radius: 5px;
   }
 
@@ -49,7 +49,7 @@ const DropDownWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 20px;
+    margin: 1.2vh 0.9vw;
   }
 
   .menu-trigger {
@@ -59,35 +59,31 @@ const DropDownWrap = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 4px 10px;
+    padding: 1.1vh 0.7rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     border: none;
     width: 100%;
     vertical-align: middle;
     transition: box-shadow 0.4s ease;
     margin-left: auto;
-  }
 
-  .menu-trigger:hover {
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-  }
+    :hover {
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    }
 
-  .menu-trigger span {
-    font-weight: 700;
-    vertical-align: middle;
-    font-size: 20px;
-    margin: 0 10px;
-  }
-
-  .menu-trigger img {
-    border-radius: 90px;
+    span {
+      font-weight: bold;
+      vertical-align: middle;
+      font-size: 2rem;
+      margin: 0 1rem;
+    }
   }
 
   .menu {
     background: #ffffff;
-    border-radius: 8px;
+    border-radius: 10px;
     position: absolute;
-    top: 48px;
+    top: 7.7vh;
     right: 0;
     width: 100%;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
@@ -95,28 +91,29 @@ const DropDownWrap = styled.div`
     visibility: hidden;
     transform: translateY(-20px);
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      border-bottom: 1px solid #dddddd;
+    }
+
+    li p {
+      text-decoration: none;
+      color: #333333;
+      padding: 5px 20px;
+      display: block;
+      font-size: 1.5rem;
+    }
   }
 
   .menu.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-  }
-
-  .menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .menu li {
-    border-bottom: 1px solid #dddddd;
-  }
-
-  .menu li p {
-    text-decoration: none;
-    color: #333333;
-    padding: 5px 20px;
-    display: block;
   }
 `;
