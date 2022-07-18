@@ -114,7 +114,6 @@ const TimerComponent = (props) => {
       {modalOn && (
         <Modal
           visible={modalOn}
-          closable={true}
           backGroundClosable={true}
           onClose={closeModal}
           backGroundColor={'rgb(82, 206, 255, 0.6)'}>

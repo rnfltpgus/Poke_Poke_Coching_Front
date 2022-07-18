@@ -33,9 +33,7 @@ const Modal = ({
         visible={visible}>
         <ModalInner tabIndex={0} className='modal-inner'>
           {closable && (
-            <button className='modal-close' onClick={close}>
-              x
-            </button>
+            <button className='modal-close' onClick={close}></button>
           )}
           {children}
         </ModalInner>
@@ -80,13 +78,20 @@ const ModalInner = styled.div`
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
   background-color: #fff;
   border-radius: 10px;
-  width: 500px;
-  height: 300px;
-  max-width: 480px;
-  top: 50%;
+  width: 60vh;
+  height: 35vh;
+  top: 52%;
   transform: translateY(-50%);
   margin: 0 auto;
   padding: 20px 20px;
+
+  .modal-close {
+    height: 1rem;
+    width: 1rem;
+    border: none;
+    background-color: rgb(255, 81, 81);
+    border-radius: 50%;
+  }
 `;
 
 export default Modal;
