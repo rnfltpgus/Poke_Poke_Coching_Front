@@ -30,8 +30,8 @@ const StudyMode = () => {
     }, 100);
   };
 
-  const default_Right_Eye_Position = [];
-  const default_Left_Eye_Position = [];
+  const default_Head_X_Position = [];
+  const default_Head_Y_Position = [];
   const keepPosture = [];
   let warnings = conditionCheck.warnings;
   let warningCount = conditionCheck.warnings;
@@ -52,27 +52,32 @@ const StudyMode = () => {
       const stretchingModeSwitchPages = switchPage(pose);
 
       for (let i = 0; i < pose.keypoints.length; i++) {
-        const left_Eye = pose.keypoints[1].position;
-        const right_Eye = pose.keypoints[2].position;
-        const right_InitialValues = default_Right_Eye_Position.length < 1;
-        const left_InitialValues = default_Right_Eye_Position.length < 1;
-        const coordinateDifference = Math.ceil(
-          right_Eye.y - default_Right_Eye_Position[0],
+        const head = pose.keypoints[0].position;
+        const head_X_InitialValues = default_Head_X_Position.length < 1;
+        const head_Y_InitialValues = default_Head_Y_Position.length < 1;
+        const head_X_Coordinate_Difference = Math.ceil(
+          head.x - default_Head_X_Position[0],
+        );
+        const head_Y_Coordinate_Difference = Math.ceil(
+          head.y - default_Head_Y_Position[0],
         );
 
-        right_InitialValues && default_Right_Eye_Position.push(right_Eye.y);
-        left_InitialValues && default_Left_Eye_Position.push(left_Eye.y);
+        console.log('🔥 좌표 체크', head);
 
-        if (coordinateDifference > 50) {
+        head_X_InitialValues && default_Head_X_Position.push(head.x);
+        head_Y_InitialValues && default_Head_Y_Position.push(head.y);
+
+        if (
+          head_Y_Coordinate_Difference > 150 ||
+          head_X_Coordinate_Difference > 100 ||
+          head_X_Coordinate_Difference < -100
+        ) {
           warnings = warnings + 1;
           warningCount = Math.floor(warnings / 170);
           countAudio.play();
           condition({ warnings: warningCount, studyModeOn: false });
         } else {
           condition({ warnings: warningCount, studyModeOn: true });
-        }
-
-        if (Math.ceil(coordinateDifference <= 50)) {
           countAudio.pause();
         }
       }

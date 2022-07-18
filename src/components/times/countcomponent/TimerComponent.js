@@ -41,7 +41,7 @@ const TimerComponent = (props) => {
 
     if (timeLeft.seconds === '00') {
       setModalOn(true);
-      setTimeout(() => {
+      interval = setTimeout(() => {
         if (modalOn === false) {
           props.setTimerRunning();
         }
@@ -112,7 +112,8 @@ const TimerComponent = (props) => {
           visible={modalOn}
           closable={true}
           backGroundClosable={true}
-          onClose={closeModal}>
+          onClose={closeModal}
+          backGroundColor={'rgb(82, 206, 255, 0.6)'}>
           <TimerShutdownNotice />
         </Modal>
       )}

@@ -60,7 +60,8 @@ const Header = () => {
                   visible={modalOn}
                   closable={true}
                   backGroundClosable={true}
-                  onClose={closeModal}>
+                  onClose={closeModal}
+                  backGroundColor={'rgb(0,0,0,0.6)'}>
                   <GuideLines />
                 </Modal>
               )}
