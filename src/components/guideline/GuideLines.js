@@ -7,12 +7,17 @@ const GuideLines = () => {
     <GuideLinesWrap>
       <div className='guide-line-title'>🧩 GuideLines</div>
       <div className='guide-line-description'>
-        <div>1. 공부모드와 스트레칭 모드로 구성되어 있습니다.</div>
-        <div>2. 공부모드와 스트레칭 모드로 구성되어 있습니다.</div>
-        <div>3. 공부모드와 스트레칭 모드로 구성되어 있습니다.</div>
-        <div>5. 공부모드와 스트레칭 모드로 구성되어 있습니다.</div>
-        <div>6. 공부모드와 스트레칭 모드로 구성되어 있습니다.</div>
-        <div>7. 공부모드와 스트레칭 모드로 구성되어 있습니다.</div>
+        <div> 1. 공부 모드와 스트레칭 모드로 구성되어 있습니다.</div>
+        <div> 2. 공부 모드에서 Mode Start를 누르면 초기 자세가 측정되어,</div>
+        <div className='guide-line-description-indent'>
+          해당 자세로 올바름 정도를 체크하게 됩니다.
+        </div>
+        <div>
+          3. 스트레칭 모드 진입 후, 좌측의 이미지와 하단의 설명을 참고하여,
+        </div>
+        <div className='guide-line-description-indent'>
+          스트레칭을 진행해주세요.
+        </div>
       </div>
     </GuideLinesWrap>
   );
@@ -22,7 +27,7 @@ export default GuideLines;
 
 const GuideLinesWrap = styled.div`
   .guide-line-title {
-    margin: 2rem auto 1rem auto;
+    margin: 1rem auto 1rem auto;
     font-size: 2rem;
     font-weight: bold;
     justify-content: center;
@@ -36,6 +41,10 @@ const GuideLinesWrap = styled.div`
 
     div {
       margin-top: 1rem;
+    }
+
+    .guide-line-description-indent {
+      margin-left: 1.2rem;
     }
   }
 `;

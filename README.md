@@ -1,14 +1,10 @@
 # Poke_Poke_Coching_Front
 
----
-
 바른자세, 바른습관을 하게 만들어주는 Poke_Poke_Coching 입니다.
 
 <br/>
 
 ## 📝 introduction
-
----
 
 현재 사무직, 공부하는 사람들을 타겟으로 컴퓨터의 카메라를 이용하여,
 
@@ -18,8 +14,6 @@
 <br/>
 
 ## 💡 Motivation
-
----
 
 개발자로 전향을 하기 위해서 책상에 앉아있는 시간이 많아졌습니다.
 
@@ -35,15 +29,11 @@
 
 ## 📅 Schedule
 
----
-
-2022.07.27 ~ 2022.07.15
+2022.06.27 ~ 2022.07.15
 
 <br/>
 
 ## 📚 Stack
-
----
 
 ### Frontend
 
@@ -63,8 +53,6 @@
 <br/>
 
 ## 📁 Installation
-
----
 
 ### Frontend (React)
 
@@ -106,7 +94,5 @@ FRONTEND_URL=<YOUR_FRONTEND_URL>
 <br/>
 
 ## 🏔 Challenge
-
----
 
 1.
