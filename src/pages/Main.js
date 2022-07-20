@@ -13,7 +13,7 @@ const Main = () => {
       </Link>
       <Link to='/stretchingpage'>
         <div className='stretching-page'>
-          <span>스트레이칭 모드</span>
+          <span>스트레칭 모드</span>
         </div>
       </Link>
     </SelectMode>

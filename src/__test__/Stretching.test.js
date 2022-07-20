@@ -18,6 +18,15 @@ describe('<StretchingPage />', () => {
   it('render StretchingPage page text', () => {
     render(<MockStretchingPage />);
 
+    // const turtleNecks = screen.getAllByText('TurtleNeck');
+    // expect(turtleNecks).toHaveTextContent('TurtleNeck');
+
+    const Arm = screen.getByText('Arm');
+    expect(Arm).toHaveTextContent('Arm');
+
+    const sideNeck = screen.getByText('SideNeck');
+    expect(sideNeck).toHaveTextContent('SideNeck');
+
     const countDown = screen.getByText('Count Down : 0 s');
     expect(countDown).toHaveTextContent('Count Down : 0 s');
 
