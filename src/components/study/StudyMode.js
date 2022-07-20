@@ -5,7 +5,7 @@ import * as poseNet from '@tensorflow-models/posenet';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
-import HandsUp from '../../util/tensorflow/posturecheck/HandsUp';
+import StrongManPose from '../../util/tensorflow/posturecheck/StrongManPose';
 import { warningSound } from '../../util/music/index';
 
 import styled from 'styled-components';
@@ -32,7 +32,7 @@ const StudyMode = () => {
 
   const default_Head_X_Position = [];
   const default_Head_Y_Position = [];
-  const keepPosture = [];
+  const pageChangeCount = [];
   let warnings = conditionCheck.warnings;
   let warningCount = conditionCheck.warnings;
 
@@ -49,7 +49,7 @@ const StudyMode = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const stretchingModeSwitchPages = switchPage(pose);
+      const stretchingModeChangePose = StrongManPose(pose);
 
       for (let i = 0; i < pose.keypoints.length; i++) {
         const head = pose.keypoints[0].position;
@@ -80,36 +80,17 @@ const StudyMode = () => {
         }
       }
 
-      if (stretchingModeSwitchPages) {
-        if (keepPosture.length === 30) {
+      if (stretchingModeChangePose === true) {
+        pageChangeCount.push(true);
+
+        if (pageChangeCount.length === 30) {
           warningAudio.pause();
           condition({ studyModeOn: false });
           navigate('/stretchingpage');
         }
+      } else {
+        pageChangeCount.pop();
       }
-    }
-  };
-
-  const switchPage = (pose) => {
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (HandsUp(pose)) {
-      if (
-        (right_Elbow.x < right_Wrist.x && right_Wrist.y > right_Elbow.y) ||
-        (right_Elbow.x > right_Wrist.x && left_Elbow.y < left_Wrist.y)
-      ) {
-        keepPosture.push(true);
-
-        return true;
-      }
-      keepPosture.pop();
-
-      return false;
-    } else {
-      return false;
     }
   };
 

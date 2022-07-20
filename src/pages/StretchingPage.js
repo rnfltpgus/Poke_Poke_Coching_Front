@@ -7,6 +7,7 @@ import DropDown from '../components/dropdown/DropDown';
 import TurtleNeckStretching from '../util/tensorflow/posturecheck/TurtleNeckStretching';
 import ArmStretching from '../util/tensorflow/posturecheck/ArmStretching';
 import SideNeckStretching from '../util/tensorflow/posturecheck/SideNeckStretching';
+import FightingPose from '../util/tensorflow/posturecheck/FightingPose';
 import drawCanvas from '../util/helpers/drawCanvas';
 import { poseImage } from '../util/images/index';
 import { poseInstructions } from '../util/data';
@@ -60,7 +61,7 @@ const StretchingPage = () => {
     }, 100);
   };
 
-  const keepPosture = [];
+  const pageChangeCount = [];
 
   const poseDetect = async (poseNetLoad, countAudio) => {
     if (
@@ -75,7 +76,7 @@ const StretchingPage = () => {
       webcamRef.current.video.height = videoHeight;
 
       const pose = await poseNetLoad.estimateSinglePose(video);
-      const studyModeSwitchPages = switchPage(pose);
+      const studyModeChangePose = FightingPose(pose);
       let isCorrectPosture = false;
 
       if (currentPose === 'TurtleNeck') {
@@ -108,42 +109,18 @@ const StretchingPage = () => {
         setCurrentTime(0);
       }
 
-      if (studyModeSwitchPages) {
-        if (keepPosture.length === 30) {
+      if (studyModeChangePose === true) {
+        pageChangeCount.push(true);
+
+        if (pageChangeCount.length === 30) {
           countAudio.pause();
           navigate('/studypage');
         }
+      } else {
+        pageChangeCount.pop();
       }
 
       drawCanvas(pose, video, videoWidth, videoHeight, canvasRef, flag);
-    }
-  };
-
-  const switchPage = (pose) => {
-    const head = pose.keypoints[0].position;
-    const left_Elbow = pose.keypoints[7].position;
-    const right_Elbow = pose.keypoints[8].position;
-    const left_Wrist = pose.keypoints[9].position;
-    const right_Wrist = pose.keypoints[10].position;
-
-    if (
-      head.y < right_Wrist.y < right_Elbow.y &&
-      head.y < left_Wrist.y < left_Elbow.y
-    ) {
-      if (
-        (right_Wrist.y && left_Wrist.y) < head.y &&
-        (left_Elbow.y && right_Elbow.y) > head.y
-      ) {
-        keepPosture.push(true);
-
-        return true;
-      } else {
-        keepPosture.pop();
-
-        return false;
-      }
-    } else {
-      return false;
     }
   };
 
