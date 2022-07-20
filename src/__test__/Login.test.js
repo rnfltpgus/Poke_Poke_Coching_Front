@@ -18,6 +18,9 @@ describe('<Login />', () => {
   it('render Login page text', () => {
     render(<MockLogin />);
 
+    const googleButton = screen.getByText('Sign in with Google');
+    expect(googleButton).toHaveTextContent('Sign in with Google');
+
     const loginFooter = screen.getByText('© 2022 Reserved by Seny');
     expect(loginFooter).toHaveTextContent('© 2022 Reserved by Seny');
   });

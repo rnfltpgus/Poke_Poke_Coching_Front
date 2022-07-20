@@ -21,7 +21,7 @@ describe('<Main />', () => {
     const studyPage = screen.getByText('공부 모드');
     expect(studyPage).toHaveTextContent('공부 모드');
 
-    const stretchingPage = screen.getByText('스트레이칭 모드');
-    expect(stretchingPage).toHaveTextContent('스트레이칭 모드');
+    const stretchingPage = screen.getByText('스트레칭 모드');
+    expect(stretchingPage).toHaveTextContent('스트레칭 모드');
   });
 });
