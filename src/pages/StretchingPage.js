@@ -10,7 +10,7 @@ import SideNeckStretching from '../util/tensorflow/posturecheck/SideNeckStretchi
 import drawCanvas from '../util/helpers/drawCanvas';
 import { poseImage } from '../util/images/index';
 import { poseInstructions } from '../util/data';
-import { very } from '../util/music/index';
+import { okGood } from '../util/music/index';
 
 import styled from 'styled-components';
 
@@ -53,7 +53,7 @@ const StretchingPage = () => {
     const poseNetLoad = await poseNet.load({
       scale: 0.8,
     });
-    const countAudio = new Audio(very);
+    const countAudio = new Audio(okGood);
 
     interval = setInterval(() => {
       poseDetect(poseNetLoad, countAudio);

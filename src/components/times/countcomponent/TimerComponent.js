@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Modal from '../../modal/Modal';
 import TimerShutdownNotice from './TimerShutdownNotice';
+import { timeShutdown } from '../../../util/music/index';
 
 import styled from 'styled-components';
 
@@ -11,6 +12,7 @@ const TimerComponent = (props) => {
   const { timerData } = props;
   const [countdownTime, setCountdownTime] = useState(0);
   const [modalOn, setModalOn] = useState(false);
+  const timeShutdownAudio = new Audio(timeShutdown);
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -45,8 +47,11 @@ const TimerComponent = (props) => {
       timeLeft.seconds === '00'
     ) {
       setModalOn(true);
+      timeShutdownAudio.play();
+
       interval = setTimeout(() => {
         if (modalOn === false) {
+          timeShutdownAudio.pause();
           props.setTimerRunning();
         }
       }, 5000);

@@ -22,7 +22,7 @@ const StopWatch = () => {
 
   return (
     <StopWatchWrap>
-      <div className='stopwatch-header'>Stopwatch</div>
+      <div className='stopwatch-header'>Stop Watch</div>
       <div className='stopwatch-display'>
         <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
         <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}:</span>

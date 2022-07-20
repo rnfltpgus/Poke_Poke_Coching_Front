@@ -1,5 +1,7 @@
-import very from './verygood.mp3';
-import sound from './bbe.mp3';
+import okGood from './ok_sound.mp3';
+import timeShutdown from './timer_shutdown.mp3';
+import warningSound from './warning_sound.mp3';
 
-export { very };
-export { sound };
+export { okGood };
+export { warningSound };
+export { timeShutdown };

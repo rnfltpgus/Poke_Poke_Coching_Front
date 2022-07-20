@@ -5,9 +5,9 @@ import styled from 'styled-components';
 const TimerShutdownNotice = () => {
   return (
     <TimerShutdownNoticeWrap>
-      <div className='timer-shutdown-title'>⏰ TimerShutdownNotice</div>
+      <div className='timer-shutdown-title'>⏰ Timer Shutdown Notice</div>
       <div className='timer-shutdown-description'>
-        설정하신 타이머가 완료되었습니다 !!
+        설정한 타이머의 시간이 완료되었습니다!
       </div>
     </TimerShutdownNoticeWrap>
   );

@@ -27,7 +27,7 @@ const CheckWrongPosture = () => {
 
   return (
     <CheckWrongPostureWrap>
-      <div className='check-wrong-posture-header'>CheckWrongPosture</div>
+      <div className='check-wrong-posture-header'>Check Wrong Posture</div>
       <div className='warnings-count'>{currentCondition.warnings} 회</div>
       {modalOn && (
         <Modal

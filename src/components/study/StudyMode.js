@@ -6,7 +6,7 @@ import { useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
 import HandsUp from '../../util/tensorflow/posturecheck/HandsUp';
-import { sound } from '../../util/music/index';
+import { warningSound } from '../../util/music/index';
 
 import styled from 'styled-components';
 
@@ -23,10 +23,10 @@ const StudyMode = () => {
     const poseNetLoad = await poseNet.load({
       scale: 0.8,
     });
-    const countAudio = new Audio(sound);
+    const warningAudio = new Audio(warningSound);
 
     interval = setInterval(() => {
-      poseDetect(poseNetLoad, countAudio);
+      poseDetect(poseNetLoad, warningAudio);
     }, 100);
   };
 
@@ -36,7 +36,7 @@ const StudyMode = () => {
   let warnings = conditionCheck.warnings;
   let warningCount = conditionCheck.warnings;
 
-  const poseDetect = async (poseNetLoad, countAudio) => {
+  const poseDetect = async (poseNetLoad, warningAudio) => {
     if (
       typeof webcamRef.current !== 'undefined' &&
       webcamRef.current !== null &&
@@ -72,17 +72,17 @@ const StudyMode = () => {
         ) {
           warnings = warnings + 1;
           warningCount = Math.floor(warnings / 250);
-          countAudio.play();
+          warningAudio.play();
           condition({ warnings: warningCount, studyModeOn: false });
         } else {
           condition({ warnings: warningCount, studyModeOn: true });
-          countAudio.pause();
+          warningAudio.pause();
         }
       }
 
       if (stretchingModeSwitchPages) {
         if (keepPosture.length === 30) {
-          countAudio.pause();
+          warningAudio.pause();
           condition({ studyModeOn: false });
           navigate('/stretchingpage');
         }

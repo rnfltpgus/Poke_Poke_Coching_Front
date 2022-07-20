@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const GuideLines = () => {
   return (
     <GuideLinesWrap>
-      <div className='guide-line-title'>🧩 GuideLines</div>
+      <div className='guide-line-title'>🧩 Guide Lines</div>
       <div className='guide-line-description'>
         <div> 1. 공부 모드와 스트레칭 모드로 구성되어 있습니다.</div>
         <div> 2. 공부 모드에서 Mode Start를 누르면 초기 자세가 측정되어,</div>
