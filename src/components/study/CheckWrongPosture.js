@@ -3,17 +3,13 @@ import { useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
 import Modal from '../modal/Modal';
-import StudyWarningNotice from './StudyWarningNotice';
+import StudyWarningNotice from '../modal/contextualmodal/StudyWarningNotice';
 
 import styled from 'styled-components';
 
 const CheckWrongPosture = () => {
   const [modalOn, setModalOn] = useState(false);
   const currentCondition = useRecoilValue(conditionState);
-
-  const closeModal = () => {
-    setModalOn(false);
-  };
 
   useEffect(() => {
     if (currentCondition.warnings % 2 === 1) {
@@ -24,6 +20,10 @@ const CheckWrongPosture = () => {
       closeModal();
     }, 700);
   }, [currentCondition.warnings]);
+
+  const closeModal = () => {
+    setModalOn(false);
+  };
 
   return (
     <CheckWrongPostureWrap>

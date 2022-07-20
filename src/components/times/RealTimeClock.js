@@ -3,6 +3,9 @@ import { useRecoilValue } from 'recoil';
 
 import { conditionState } from '../../recoil/atom';
 import padNumber from '../../util/helpers/padNumber';
+import Modal from '../modal/Modal';
+import CheckNotice from '../modal/contextualmodal/CheckNotice';
+import { checkSound } from '../../util/music/index';
 
 import styled from 'styled-components';
 
@@ -12,6 +15,8 @@ const RealTimeClock = () => {
   const [min, setMin] = useState(padNumber(now.getMinutes(), 2));
   const [sec, setSec] = useState(padNumber(now.getSeconds(), 2));
   const [time, setTime] = useState(0);
+  const [modalOn, setModalOn] = useState(false);
+  const checkSoundAudio = new Audio(checkSound);
   const currentCondition = useRecoilValue(conditionState);
   const interval = useRef(null);
 
@@ -40,6 +45,24 @@ const RealTimeClock = () => {
     return () => clearInterval(interval);
   }, [currentCondition.studyModeOn]);
 
+  useEffect(() => {
+    if ((currentCondition.studyModeOn === true && time % 3600000) === 0) {
+      // 시연용 코드
+      // if ((currentCondition.studyModeOn === true && time % 7000) === 0) {
+      setModalOn(true);
+      checkSoundAudio.play();
+
+      setTimeout(() => {
+        checkSoundAudio.pause();
+        closeModal();
+      }, 5000);
+    }
+  }, [time]);
+
+  const closeModal = () => {
+    setModalOn(false);
+  };
+
   return (
     <RealTimeClockWrap>
       <div>
@@ -56,6 +79,15 @@ const RealTimeClock = () => {
           <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}초 </span>
         </div>
       </div>
+      {modalOn && (
+        <Modal
+          visible={modalOn}
+          backGroundClosable={true}
+          onClose={closeModal}
+          backGroundColor={'rgb(56, 255, 209, 0.6)'}>
+          <CheckNotice />
+        </Modal>
+      )}
     </RealTimeClockWrap>
   );
 };
