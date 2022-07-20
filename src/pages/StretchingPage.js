@@ -262,6 +262,6 @@ const StretchingPageWrap = styled.div`
     padding: 1rem;
     border-radius: 10px;
     background-color: #f8e9ed;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 `;

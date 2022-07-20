@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import TimerCountDown from './countcomponent/TimerComponent';
-import InputCountDown from './countcomponent/InputComponent';
+import TimerCountDown from './countdowncomponent/TimerComponent';
+import InputCountDown from './countdowncomponent/InputComponent';
 
 const CountdownTimer = () => {
   const [isTimerRunning, setTimerRunning] = useState(false);
