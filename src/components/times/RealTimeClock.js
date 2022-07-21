@@ -46,16 +46,16 @@ const RealTimeClock = () => {
   }, [currentCondition.studyModeOn]);
 
   useEffect(() => {
-    if ((currentCondition.studyModeOn === true && time % 3600000) === 0) {
-      // 시연용 코드
-      // if ((currentCondition.studyModeOn === true && time % 7000) === 0) {
+    // if ((currentCondition.studyModeOn === true && time % 3600000) === 0) {
+    // 시연용 코드
+    if ((currentCondition.studyModeOn === true && time % 100000) === 0) {
       setModalOn(true);
       checkSoundAudio.play();
 
       setTimeout(() => {
         checkSoundAudio.pause();
         closeModal();
-      }, 5000);
+      }, 6000);
     }
   }, [time]);
 

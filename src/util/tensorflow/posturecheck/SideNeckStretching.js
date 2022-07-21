@@ -20,10 +20,10 @@ const SideNeckStretching = (pose) => {
         (head.y > left_Wrist.y && left_Elbow.y < left_Shoulder.y)
       ) {
         if (
-          (left_Wrist.y < right_Shoulder.y && right_Wrist.x && right_Elbow.x) <
-            right_Shoulder.x ||
-          (right_Wrist.y < left_Shoulder.y && left_Wrist.x && left_Elbow.x) >
-            left_Shoulder.x
+          (left_Wrist.y < right_Shoulder.y &&
+            (right_Wrist.x && right_Elbow.x) < right_Shoulder.x) ||
+          (right_Wrist.y < left_Shoulder.y &&
+            (left_Wrist.x && left_Elbow.x) > left_Shoulder.x)
         ) {
           return true;
         } else {

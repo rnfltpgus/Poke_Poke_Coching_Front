@@ -11,10 +11,8 @@ const FightingPose = (pose) => {
     if (right_Elbow.y > right_Wrist.y && left_Elbow.y > left_Wrist.y) {
       if (right_Shoulder.x < right_Wrist.x && left_Shoulder.x > left_Wrist.x) {
         if (
-          head.y < right_Elbow.y &&
-          right_Wrist.y &&
-          left_Elbow.y &&
-          left_Wrist.y
+          head.y <
+          (right_Elbow.y && right_Wrist.y && left_Elbow.y && left_Wrist.y)
         ) {
           return true;
         } else {
