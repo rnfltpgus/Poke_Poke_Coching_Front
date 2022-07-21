@@ -11,6 +11,8 @@ import { warningSound } from '../../util/music/index';
 import styled from 'styled-components';
 
 let interval;
+let warnings = 0;
+let warningCount = 0;
 
 const StudyMode = () => {
   const webcamRef = useRef(null);
@@ -33,8 +35,6 @@ const StudyMode = () => {
   const default_Head_X_Position = [];
   const default_Head_Y_Position = [];
   const pageChangeCount = [];
-  let warnings = conditionCheck.warnings;
-  let warningCount = conditionCheck.warnings;
 
   const poseDetect = async (poseNetLoad, warningAudio) => {
     if (
@@ -68,7 +68,8 @@ const StudyMode = () => {
         if (
           head_Y_Coordinate_Difference > 200 ||
           head_X_Coordinate_Difference > 100 ||
-          head_X_Coordinate_Difference < -100
+          head_X_Coordinate_Difference < -100 ||
+          head === null
         ) {
           warnings = warnings + 1;
           warningCount = Math.floor(warnings / 250);
@@ -102,7 +103,7 @@ const StudyMode = () => {
 
   const modeStop = () => {
     setIsStartPose(false);
-    condition({ warnings: 0, studyModeOn: false });
+    condition({ warnings: conditionCheck.warnings, studyModeOn: false });
     clearInterval(interval);
   };
 
