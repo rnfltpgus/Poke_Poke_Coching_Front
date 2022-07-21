@@ -48,7 +48,7 @@ const RealTimeClock = () => {
   useEffect(() => {
     // if ((currentCondition.studyModeOn === true && time % 3600000) === 0) {
     // 시연용 코드
-    if ((currentCondition.studyModeOn === true && time % 100000) === 0) {
+    if ((currentCondition.studyModeOn === true && time % 300000) === 0) {
       setModalOn(true);
       checkSoundAudio.play();
 
