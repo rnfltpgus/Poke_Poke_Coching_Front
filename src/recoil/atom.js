@@ -11,10 +11,14 @@ const userState = atom({
 const conditionState = atom({
   key: 'condition',
   default: {
-    runtime: 0,
     warnings: 0,
     studyModeOn: false,
   },
 });
 
-export { userState, conditionState };
+const timeState = atom({
+  key: 'studyTime',
+  default: 0,
+});
+
+export { userState, conditionState, timeState };

@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
 
-import { conditionState } from '../../recoil/atom';
-import padNumber from '../../util/helpers/padNumber';
+import { conditionState, timeState } from '../../recoil/atom';
 import Modal from '../modal/Modal';
 import CheckNotice from '../modal/contextualmodal/CheckNotice';
+import padNumber from '../../util/helpers/padNumber';
 import { checkSound } from '../../util/music/index';
 
 import styled from 'styled-components';
@@ -14,9 +14,10 @@ const RealTimeClock = () => {
   const [hour, setHour] = useState(padNumber(now.getHours(), 2));
   const [min, setMin] = useState(padNumber(now.getMinutes(), 2));
   const [sec, setSec] = useState(padNumber(now.getSeconds(), 2));
-  const [time, setTime] = useState(0);
   const [modalOn, setModalOn] = useState(false);
   const checkSoundAudio = new Audio(checkSound);
+  const studyTime = useSetRecoilState(timeState);
+  const runTime = useRecoilValue(timeState);
   const currentCondition = useRecoilValue(conditionState);
   const interval = useRef(null);
 
@@ -32,32 +33,27 @@ const RealTimeClock = () => {
   }, []);
 
   useEffect(() => {
-    let interval = null;
-
     if (currentCondition.studyModeOn) {
-      interval = setInterval(() => {
-        setTime((prevTime) => prevTime + 1000);
+      interval.current = setInterval(() => {
+        studyTime((pre) => pre + 1000);
       }, 1000);
-    } else {
-      clearInterval(interval);
     }
 
-    return () => clearInterval(interval);
-  }, [currentCondition.studyModeOn]);
+    return () => clearInterval(interval.current);
+  }, [currentCondition.studyModeOn, studyTime]);
 
   useEffect(() => {
-    // if ((currentCondition.studyModeOn === true && time % 3600000) === 0) {
-    // 시연용 코드
-    if ((currentCondition.studyModeOn === true && time % 300000) === 0) {
+    // if ((currentCondition.studyModeOn === true && runTime % 3600000) === 0) {
+    // 시연용 타이머 시간
+    if ((currentCondition.studyModeOn === true && runTime % 100000) === 0) {
       setModalOn(true);
       checkSoundAudio.play();
-
       setTimeout(() => {
         checkSoundAudio.pause();
         closeModal();
       }, 6000);
     }
-  }, [time]);
+  }, [runTime]);
 
   const closeModal = () => {
     setModalOn(false);
@@ -74,9 +70,9 @@ const RealTimeClock = () => {
       <div>
         <div className='realtime-study-header'>Real Study Time</div>
         <div className='realtime'>
-          <span>{('0' + Math.floor((time / 3600000) % 60)).slice(-2)}시 </span>
-          <span>{('0' + Math.floor((time / 60000) % 60)).slice(-2)}분 </span>
-          <span>{('0' + Math.floor((time / 1000) % 60)).slice(-2)}초 </span>
+          <span>{('0' + Math.floor((runTime / 3600000) % 60)).slice(-2)}시 </span>
+          <span>{('0' + Math.floor((runTime / 60000) % 60)).slice(-2)}분 </span>
+          <span>{('0' + Math.floor((runTime / 1000) % 60)).slice(-2)}초 </span>
         </div>
       </div>
       {modalOn && (

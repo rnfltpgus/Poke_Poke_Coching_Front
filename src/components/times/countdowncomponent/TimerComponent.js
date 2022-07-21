@@ -26,7 +26,6 @@ const TimerComponent = (props) => {
     expectedTime += hours > 0 ? hours * 3600000 : 0;
     expectedTime += minutes > 0 ? minutes * 60000 : 0;
     expectedTime += seconds > 0 ? seconds * 1000 : 0;
-
     setCountdownTime(expectedTime);
 
     return () => {
@@ -48,7 +47,6 @@ const TimerComponent = (props) => {
     ) {
       setModalOn(true);
       timeShutdownAudio.play();
-
       interval = setTimeout(() => {
         if (modalOn === false) {
           timeShutdownAudio.pause();

@@ -12,13 +12,16 @@ const CheckWrongPosture = () => {
   const currentCondition = useRecoilValue(conditionState);
 
   useEffect(() => {
+    let timer = null;
+
     if (currentCondition.warnings % 2 === 1) {
       setModalOn(true);
     }
-
-    setTimeout(() => {
+    timer = setTimeout(() => {
       closeModal();
     }, 700);
+
+    return () => clearTimeout(timer);
   }, [currentCondition.warnings]);
 
   const closeModal = () => {
