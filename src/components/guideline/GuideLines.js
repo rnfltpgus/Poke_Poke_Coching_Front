@@ -40,7 +40,7 @@ const GuideLinesWrap = styled.div`
     font-size: 1.2rem;
 
     div {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
 
     .guide-line-description-indent {
