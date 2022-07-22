@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { userState } from '../../recoil/atom';
@@ -10,6 +10,7 @@ import Modal from '../modal/Modal';
 import styled from 'styled-components';
 
 const Header = () => {
+  const navigate = useNavigate();
   const isLogins = useSetRecoilState(userState);
   const user = useRecoilValue(userState);
   const [modalOn, setModalOn] = useState(false);
@@ -42,7 +43,7 @@ const Header = () => {
     <HeaderWrap>
       <div className='header-layout container'>
         <h1>
-          <a href='/'>P.P.C.</a>
+          <span onClick={() => navigate('/')}>P.P.C.</span>
         </h1>
         <div>
           {user.displayName ? (
@@ -83,7 +84,7 @@ const HeaderWrap = styled.div`
   padding: 25px 0;
   border-bottom: 1px solid #ebebeb;
 
-  h1 a {
+  h1 span {
     margin-left: 25px;
     font-weight: bold;
     font-size: 28px;

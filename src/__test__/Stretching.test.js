@@ -1,36 +1,27 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+
+import { BrowserRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import StretchingPage from '../pages/StretchingPage';
 
-const MockStretchingPage = () => {
-  return (
-    <BrowserRouter>
+describe('StretchingPage', () => {
+  beforeEach(() => {
+    // eslint-disable-next-line testing-library/no-render-in-setup
+    render(
       <RecoilRoot>
-        <StretchingPage />
-      </RecoilRoot>
-    </BrowserRouter>
-  );
-};
+        <Router>
+          <StretchingPage />
+        </Router>
+      </RecoilRoot>,
+    );
+  });
 
-describe('<StretchingPage />', () => {
   it('render StretchingPage page text', () => {
-    render(<MockStretchingPage />);
-
-    // const turtleNecks = screen.getAllByText('TurtleNeck');
-    // expect(turtleNecks).toHaveTextContent('TurtleNeck');
-
-    const Arm = screen.getByText('Arm');
-    expect(Arm).toHaveTextContent('Arm');
-
-    const sideNeck = screen.getByText('SideNeck');
-    expect(sideNeck).toHaveTextContent('SideNeck');
-
-    const countDown = screen.getByText('Count Down : 0 s');
-    expect(countDown).toHaveTextContent('Count Down : 0 s');
-
-    const maxMaintainTime = screen.getByText('Max Maintain Time : 0 s');
-    expect(maxMaintainTime).toHaveTextContent('Max Maintain Time : 0 s');
+    // expect(screen.getByText('TurtleNeck')).toBeInTheDocument();
+    expect(screen.getByText('Arm')).toBeInTheDocument();
+    expect(screen.getByText('SideNeck')).toBeInTheDocument();
+    expect(screen.getByText('Count Down : 0 s')).toBeInTheDocument();
+    expect(screen.getByText('Max Maintain Time : 0 s')).toBeInTheDocument();
   });
 });
