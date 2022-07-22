@@ -27,10 +27,17 @@ describe('StudyPage', () => {
     expect(screen.getByText('Check Wrong Posture')).toBeInTheDocument();
   });
 
-  // it('진동 버튼을 누를 경우 화면에서는 X에서 O로 바뀌어야 합니다', async () => {
-  //   const button = screen.getByText('Start');
-  //   fireEvent.click(button);
+  it('Clicking Mode Start changes Mode Stop and pressing the Mode Stop button changes Mode Start.', () => {
+    fireEvent.click(screen.getByText('Mode Start'));
+    expect(screen.getByText('Mode Stop')).toHaveTextContent('Mode Stop');
 
-  //   expect(await screen.findByTestId('Start')).toHaveTextContent('Reset');
-  // });
+    fireEvent.click(screen.getByText('Mode Stop'));
+    expect(screen.getByText('Mode Start')).toHaveTextContent('Mode Start');
+  });
+
+  it('Text color must match.', () => {
+    expect(screen.getByText('Mode Start')).toHaveStyle({
+      color: 'rgb(255, 255, 255)',
+    });
+  });
 });
