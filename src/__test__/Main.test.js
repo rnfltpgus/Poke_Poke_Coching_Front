@@ -1,27 +1,24 @@
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+
+import { BrowserRouter as Router } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import Main from '../pages/Main';
 
-const MockMain = () => {
-  return (
-    <BrowserRouter>
+describe('Main', () => {
+  beforeEach(() => {
+    // eslint-disable-next-line testing-library/no-render-in-setup
+    render(
       <RecoilRoot>
-        <Main />
-      </RecoilRoot>
-    </BrowserRouter>
-  );
-};
+        <Router>
+          <Main />
+        </Router>
+      </RecoilRoot>,
+    );
+  });
 
-describe('<Main />', () => {
   it('render Main page text', () => {
-    render(<MockMain />);
-
-    const studyPage = screen.getByText('공부 모드');
-    expect(studyPage).toHaveTextContent('공부 모드');
-
-    const stretchingPage = screen.getByText('스트레칭 모드');
-    expect(stretchingPage).toHaveTextContent('스트레칭 모드');
+    expect(screen.getByText('공부 모드')).toBeInTheDocument();
+    expect(screen.getByText('스트레칭 모드')).toBeInTheDocument();
   });
 });
