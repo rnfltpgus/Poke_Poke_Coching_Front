@@ -21,4 +21,11 @@ describe('Login', () => {
     expect(screen.getByText('Sign in with Google')).toBeInTheDocument();
     expect(screen.getByText('© 2022 Reserved by Seny')).toBeInTheDocument();
   });
+
+  it('renders logo-image', () => {
+    expect(screen.getByAltText('logo-imag')).toHaveAttribute(
+      'src',
+      '/img/Logo.png',
+    );
+  });
 });

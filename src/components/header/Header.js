@@ -42,9 +42,7 @@ const Header = () => {
   return (
     <HeaderWrap>
       <div className='header-layout container'>
-        <h1>
-          <span onClick={() => navigate('/')}>P.P.C.</span>
-        </h1>
+        <h1 onClick={() => navigate('/')}>P.P.C.</h1>
         <div>
           {user.displayName ? (
             <>
@@ -84,7 +82,7 @@ const HeaderWrap = styled.div`
   padding: 25px 0;
   border-bottom: 1px solid #ebebeb;
 
-  h1 span {
+  h1 {
     margin-left: 25px;
     font-weight: bold;
     font-size: 28px;
