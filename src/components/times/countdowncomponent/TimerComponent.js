@@ -6,7 +6,7 @@ import { timeShutdown } from '../../../util/music/index';
 
 import styled from 'styled-components';
 
-let interval = 0;
+let interval = null;
 
 const TimerComponent = (props) => {
   const { timerData } = props;
@@ -55,9 +55,7 @@ const TimerComponent = (props) => {
       }, 5000);
     }
 
-    return () => {
-      clearTimeout(interval);
-    };
+    return () => clearTimeout(interval);
   }, [countdownTime, props, timeLeft.seconds]);
 
   const calculateTimeLeft = () => {
@@ -81,11 +79,9 @@ const TimerComponent = (props) => {
   };
 
   const stopTimer = () => {
-    if (interval > 0) {
-      clearTimeout(interval);
-    }
-
     props.stopCountdown();
+
+    return () => clearTimeout(interval);
   };
 
   const closeModal = () => {

@@ -85,8 +85,8 @@ const StudyMode = () => {
         pageChangeCount.push(true);
 
         if (pageChangeCount.length === 30) {
+          condition({ warnings: conditionCheck.warnings, studyModeOn: false });
           warningAudio.pause();
-          condition({ studyModeOn: false });
           navigate('/stretchingpage');
         }
       } else {
@@ -104,7 +104,8 @@ const StudyMode = () => {
   const modeStop = () => {
     setIsStartPose(false);
     condition({ warnings: conditionCheck.warnings, studyModeOn: false });
-    clearInterval(interval);
+
+    return () => clearInterval(interval);
   };
 
   if (isStartPose) {

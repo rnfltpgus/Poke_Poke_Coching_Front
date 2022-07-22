@@ -17,6 +17,7 @@ const CheckWrongPosture = () => {
     if (currentCondition.warnings % 2 === 1) {
       setModalOn(true);
     }
+
     timer = setTimeout(() => {
       closeModal();
     }, 700);
