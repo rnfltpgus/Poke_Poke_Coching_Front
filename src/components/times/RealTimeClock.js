@@ -33,13 +33,16 @@ const RealTimeClock = () => {
   }, []);
 
   useEffect(() => {
+    let interval = null;
     if (currentCondition.studyModeOn) {
-      interval.current = setInterval(() => {
+      interval = setInterval(() => {
         studyTime((pre) => pre + 1000);
       }, 1000);
+    } else {
+      clearInterval(interval);
     }
 
-    return () => clearInterval(interval.current);
+    return () => clearInterval(interval);
   }, [currentCondition.studyModeOn, studyTime]);
 
   useEffect(() => {
@@ -70,7 +73,9 @@ const RealTimeClock = () => {
       <div>
         <div className='realtime-study-header'>Real Study Time</div>
         <div className='realtime'>
-          <span>{('0' + Math.floor((runTime / 3600000) % 60)).slice(-2)}시 </span>
+          <span>
+            {('0' + Math.floor((runTime / 3600000) % 60)).slice(-2)}시{' '}
+          </span>
           <span>{('0' + Math.floor((runTime / 60000) % 60)).slice(-2)}분 </span>
           <span>{('0' + Math.floor((runTime / 1000) % 60)).slice(-2)}초 </span>
         </div>

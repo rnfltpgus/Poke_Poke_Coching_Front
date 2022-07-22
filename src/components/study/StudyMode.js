@@ -66,7 +66,7 @@ const StudyMode = () => {
         head_Y_InitialValues && default_Head_Y_Position.push(head.y);
 
         if (
-          head_Y_Coordinate_Difference > 200 ||
+          head_Y_Coordinate_Difference > 170 ||
           head_X_Coordinate_Difference > 100 ||
           head_X_Coordinate_Difference < -100 ||
           head === null
