@@ -3,6 +3,8 @@
 P.P.C. 란? Poke Poke Coaching의 약어로 ‘콕콕 찔러 코칭해준다’ 라는 뜻을 가지고 있습니다.
 바른자세를 유지하게 도와주며, 앉아서 생활하는 많은 현대인들을 위한 서비스 입니다.
 
+[배포링크](https://spontaneous-duckanoo-b4cd63.netlify.app/)
+
 <br/>
 
 ## 📝 Introduction
