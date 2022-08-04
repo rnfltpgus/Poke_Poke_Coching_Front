@@ -116,6 +116,7 @@ FRONTEND_URL=<YOUR_FRONTEND_URL>
 ## ⚙️ Key Features
 
 1. 공부 모드
+<img width="1680" alt="image" src="https://user-images.githubusercontent.com/80088956/182792115-798a2b5e-b714-41bf-86a8-7a1fc433af75.png">
 
 - 공부 모드
   - Mode Start를 누르면 학습 타이머(Real Study Time)가 흐르고 자세를 감지합니다.
@@ -126,6 +127,7 @@ FRONTEND_URL=<YOUR_FRONTEND_URL>
   - StopWatch : 시간을 체크할 수 있습니다.
 
 2. 스트레칭 모드
+<img width="1680" alt="image" src="https://user-images.githubusercontent.com/80088956/182791782-71e72b19-305c-4c9c-919c-919780ea9c81.png">
 
 - 부위별 스트레칭
 
